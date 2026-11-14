@@ -1,0 +1,90 @@
+@import 'tailwindcss';
+
+/*
+ * Demo „Briciul”: un sistem vizual separat de portofoliu.
+ * Fildeș, espresso, vișiniu și alamă. Contraste (WCAG 2.2):
+ *   espresso #1B1714 pe fildeș #F3EDE3 → 15,9:1
+ *   gri-cald #6B5F55 pe fildeș        →  5,6:1
+ *   vișiniu  #7A1F1F pe fildeș        →  9,2:1
+ *   alamă    #E3C88F pe espresso      → 11,0:1
+ */
+@theme inline {
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    background: #f3ede3;
+    color: #1b1714;
+    -webkit-font-smoothing: antialiased;
+    scroll-padding-top: 6rem;
+  }
+  /* Demo-ul nu folosește ScrollTrigger, deci derularea lină din CSS e sigură aici. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+  ::selection {
+    background: #7a1f1f;
+    color: #f3ede3;
+  }
+  :focus-visible {
+    outline: 2px solid #7a1f1f;
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible {
+    outline-color: #e3c88f;
+  }
+  dialog[open] {
+    animation: dialog-in 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/* Etichetele: Archivo îngustat, majuscule, spațiere largă. */
+@utility b-label {
+  font-family: var(--font-archivo);
+  font-stretch: 75%;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+@keyframes barber-stripes {
+  to {
+    transform: translateY(-44px);
+  }
+}
+.barber-stripes {
+  animation: barber-stripes 2.6s linear infinite;
+}
+
+@keyframes barber-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.barber-marquee {
+  animation: barber-marquee 38s linear infinite;
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barber-stripes,
+  .barber-marquee,
+  dialog[open] {
+    animation: none;
+  }
+}
