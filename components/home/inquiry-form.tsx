@@ -3,9 +3,20 @@
 import Link from 'next/link'
 import { AnimatePresence, motion } from 'motion/react'
 import { ChevronDown } from 'lucide-react'
-import { type FormEvent, useId, useRef, useState } from 'react'
+import { type FormEvent, useId, useMemo, useRef, useState } from 'react'
 import type { Dictionary } from '@/content/dictionary'
-import { budgetOptions, type Errors, type Field, type Inquiry, type InquiryResponse, projectOptions, validate } from '@/lib/inquiry'
+import {
+  budgetOptions,
+  type Errors,
+  type Field,
+  fieldOrder,
+  honeypotField,
+  type Inquiry,
+  type InquiryResponse,
+  limits,
+  projectOptions,
+  validate,
+} from '@/lib/inquiry'
 import type { Locale } from '@/lib/i18n'
 import { ease } from '@/lib/motion'
 import { ArrowSwap, buttonClass } from '@/components/ui/button'
@@ -21,14 +32,16 @@ const empty = (locale: Locale): Inquiry => ({
   message: '',
   consent: false,
   locale,
-  website: '',
+  [honeypotField]: '',
 })
 
-const order: Field[] = ['name', 'contact', 'project', 'budget', 'message', 'consent']
+// Aceeași referință de fiecare dată: resetarea erorilor nu provoacă o redare în plus.
+const noErrors: Errors = {}
 
 export function InquiryForm({ locale, t, email, privacyHref }: Props) {
   const [data, setData] = useState<Inquiry>(() => empty(locale))
-  const [errors, setErrors] = useState<Errors>({})
+  // Erorile întoarse de server; cele din browser se calculează la redare.
+  const [serverErrors, setServerErrors] = useState<Errors>(noErrors)
   const [submitted, setSubmitted] = useState(false)
   const [status, setStatus] = useState<Status>('idle')
   const form = useRef<HTMLFormElement>(null)
@@ -37,10 +50,15 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
   const id = (f: string) => `${uid}-${f}`
 
   const set = <K extends keyof Inquiry>(key: K, value: Inquiry[K]) => {
-    const next = { ...data, [key]: value }
-    setData(next)
-    if (submitted) setErrors(validate(next))
+    setData((prev) => ({ ...prev, [key]: value }))
+    setServerErrors(noErrors)
   }
+
+  // O singură validare per modificare, abia după prima încercare de trimitere.
+  const errors = useMemo<Errors>(
+    () => (submitted ? { ...serverErrors, ...validate(data) } : noErrors),
+    [submitted, serverErrors, data],
+  )
 
   const mailto = () => {
     const lines = [
@@ -51,15 +69,16 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
       '',
       data.message,
     ]
-    return `mailto:${email}?subject=${encodeURIComponent(`${t.mailSubject}: ${data.name}`)}&body=${encodeURIComponent(lines.join('\n'))}`
+    const subject = encodeURIComponent(`${t.mailSubject}: ${data.name}`)
+    return `mailto:${email}?subject=${subject}&body=${encodeURIComponent(lines.join('\n'))}`
   }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
     setSubmitted(true)
+    setServerErrors(noErrors)
     const found = validate(data)
-    setErrors(found)
-    const first = order.find((f) => found[f])
+    const first = fieldOrder.find((f) => found[f])
     if (first) {
       form.current?.querySelector<HTMLElement>(`#${CSS.escape(id(first))}`)?.focus()
       return
@@ -78,7 +97,7 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
       else if (body && !body.ok && body.code === 'not_configured') next = 'not_configured'
       else if (body && !body.ok && body.code === 'rate_limited') next = 'rate_limited'
       else if (body && !body.ok && body.code === 'invalid' && body.fields.length) {
-        setErrors(Object.fromEntries(body.fields.map((f) => [f, true])))
+        setServerErrors(Object.fromEntries(body.fields.map((f) => [f, true])))
         setStatus('idle')
         return
       }
@@ -100,7 +119,7 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
           onClick={() => {
             setData(empty(locale))
             setSubmitted(false)
-            setErrors({})
+            setServerErrors(noErrors)
             setStatus('idle')
           }}
           className={buttonClass('glass', 'mt-8')}
@@ -112,24 +131,70 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
   }
 
   const errorCount = Object.keys(errors).length
-  const describe = (f: Field, hint?: string) => [errors[f] ? id(`${f}-error`) : null, hint].filter(Boolean).join(' ') || undefined
+  const describe = (f: Field, hint?: string) =>
+    [errors[f] ? id(`${f}-error`) : null, hint].filter(Boolean).join(' ') || undefined
 
   return (
-    <form ref={form} onSubmit={onSubmit} noValidate className="flex flex-col gap-8">
+    <form ref={form} onSubmit={onSubmit} noValidate className="relative flex flex-col gap-8">
       <p className="text-sm text-faint">{t.required}</p>
 
       <div aria-live="polite" className="empty:hidden">
-        {submitted && errorCount > 0 && <p className="border-l-2 border-ember pl-4 text-sm text-paper">{t.errors.summary}</p>}
+        {submitted && errorCount > 0 && (
+          <p className="border-l-2 border-ember pl-4 text-sm text-paper">{t.errors.summary}</p>
+        )}
       </div>
 
       <div className="grid gap-8 sm:grid-cols-2">
-        <TextField id={id('name')} label={t.name} value={data.name} onChange={(v) => set('name', v)} autoComplete="name" error={errors.name && t.errors.name} errorId={id('name-error')} describedBy={describe('name')} maxLength={100} />
-        <TextField id={id('contact')} label={t.contact} value={data.contact} onChange={(v) => set('contact', v)} autoComplete="email" error={errors.contact && t.errors.contact} errorId={id('contact-error')} describedBy={describe('contact')} maxLength={254} />
+        <TextField
+          id={id('name')}
+          label={t.name}
+          value={data.name}
+          onChange={(v) => set('name', v)}
+          autoComplete="name"
+          error={errors.name && t.errors.name}
+          errorId={id('name-error')}
+          describedBy={describe('name')}
+          maxLength={limits.name[1]}
+        />
+        <TextField
+          id={id('contact')}
+          label={t.contact}
+          value={data.contact}
+          onChange={(v) => set('contact', v)}
+          autoComplete="email"
+          error={errors.contact && t.errors.contact}
+          errorId={id('contact-error')}
+          describedBy={describe('contact')}
+          maxLength={limits.contact[1]}
+        />
       </div>
 
       <div className="grid gap-8 sm:grid-cols-2">
-        <SelectField id={id('project')} label={t.project} placeholder={t.projectPlaceholder} value={data.project} onChange={(v) => set('project', v as Inquiry['project'])} options={projectOptions.map((o) => [o, t.projects[o]])} error={errors.project && t.errors.project} errorId={id('project-error')} describedBy={describe('project')} />
-        <SelectField id={id('budget')} label={t.budget} optional={t.optional} placeholder={t.budgetPlaceholder} value={data.budget} onChange={(v) => set('budget', v as Inquiry['budget'])} options={budgetOptions.map((o) => [o, t.budgets[o]])} error={errors.budget && t.errors.budget} errorId={id('budget-error')} describedBy={describe('budget')} />
+        <SelectField
+          id={id('project')}
+          label={t.project}
+          placeholder={t.projectPlaceholder}
+          value={data.project}
+          onChange={(v) => set('project', v)}
+          options={projectOptions}
+          labels={t.projects}
+          error={errors.project && t.errors.project}
+          errorId={id('project-error')}
+          describedBy={describe('project')}
+        />
+        <SelectField
+          id={id('budget')}
+          label={t.budget}
+          optional={t.optional}
+          placeholder={t.budgetPlaceholder}
+          value={data.budget}
+          onChange={(v) => set('budget', v)}
+          options={budgetOptions}
+          labels={t.budgets}
+          error={errors.budget && t.errors.budget}
+          errorId={id('budget-error')}
+          describedBy={describe('budget')}
+        />
       </div>
 
       <div className="flex flex-col gap-2">
@@ -141,7 +206,7 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
           value={data.message}
           onChange={(e) => set('message', e.target.value)}
           rows={5}
-          maxLength={4000}
+          maxLength={limits.message[1]}
           aria-invalid={errors.message ? true : undefined}
           aria-describedby={describe('message', id('message-hint'))}
           className={`${fieldClass(!!errors.message)} resize-y py-3`}
@@ -152,10 +217,19 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
         <FieldError id={id('message-error')} message={errors.message && t.errors.message} />
       </div>
 
-      {/* Câmp-capcană pentru roboți: ascuns vizual și pentru cititoarele de ecran. */}
-      <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
-        <label htmlFor={id('website')}>Website</label>
-        <input id={id('website')} tabIndex={-1} autoComplete="off" value={data.website} onChange={(e) => set('website', e.target.value)} />
+      {/* Câmp-capcană pentru roboți: ascuns vizual și pentru cititoarele de ecran.
+          `sr-only` îl decupează pe loc (1px), fără mutare în afara paginii, deci fără derulare orizontală. */}
+      <div aria-hidden="true" className="sr-only">
+        <label htmlFor={id(honeypotField)}>Website</label>
+        <input
+          id={id(honeypotField)}
+          name={honeypotField}
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={data[honeypotField]}
+          onChange={(e) => set(honeypotField, e.target.value)}
+        />
       </div>
 
       <div className="flex flex-col gap-2">
@@ -171,7 +245,11 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
           />
           <label htmlFor={id('consent')} className="text-sm leading-relaxed text-mist">
             {t.consentBefore}
-            <Link href={privacyHref} target="_blank" className="text-paper underline underline-offset-4 hover:text-ember">
+            <Link
+              href={privacyHref}
+              target="_blank"
+              className="text-paper underline underline-offset-4 hover:text-ember"
+            >
               {t.consentLink}
             </Link>
             {t.consentAfter}
@@ -181,7 +259,11 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
       </div>
 
       <div>
-        <button type="submit" disabled={status === 'sending'} className={buttonClass('primary', 'w-full disabled:opacity-60 sm:w-auto')}>
+        <button
+          type="submit"
+          disabled={status === 'sending'}
+          className={buttonClass('primary', 'w-full disabled:opacity-60 sm:w-auto')}
+        >
           <span>{status === 'sending' ? t.sending : t.submit}</span>
           <ArrowSwap />
         </button>
@@ -199,9 +281,15 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
             transition={{ duration: 0.5, ease: ease.out }}
             className="border border-ember/60 p-6 outline-none md:p-8"
           >
-            <h3 className="font-medium text-paper">{status === 'not_configured' ? t.notConfigured.title : t.failed.title}</h3>
+            <h3 className="font-medium text-paper">
+              {status === 'not_configured' ? t.notConfigured.title : t.failed.title}
+            </h3>
             <p className="mt-2 text-mist">
-              {status === 'not_configured' ? t.notConfigured.body : status === 'rate_limited' ? t.failed.rate : t.failed.body}
+              {status === 'not_configured'
+                ? t.notConfigured.body
+                : status === 'rate_limited'
+                  ? t.failed.rate
+                  : t.failed.body}
             </p>
             <a href={mailto()} className={buttonClass('primary', 'mt-6')}>
               <span>{status === 'not_configured' ? t.notConfigured.cta : t.failed.cta}</span>
@@ -217,9 +305,12 @@ export function InquiryForm({ locale, t, email, privacyHref }: Props) {
 
 // `muted`: select-ul fără valoare își arată textul de început estompat, ca un placeholder.
 const fieldClass = (invalid: boolean, muted = false) =>
-  `w-full border-0 border-b bg-transparent px-0 text-[1.0625rem] ${muted ? 'text-faint' : 'text-paper'} outline-none transition-colors placeholder:text-faint focus-visible:border-ember focus-visible:outline-none ${
-    invalid ? 'border-ember' : 'border-faint hover:border-mist'
-  }`
+  [
+    'w-full border-0 border-b bg-transparent px-0 text-[1.0625rem] outline-none transition-colors',
+    'placeholder:text-faint focus-visible:border-ember focus-visible:outline-none',
+    muted ? 'text-faint' : 'text-paper',
+    invalid ? 'border-ember' : 'border-faint hover:border-mist',
+  ].join(' ')
 
 function FieldError({ id, message }: { id: string; message?: string | false }) {
   if (!message) return null
@@ -245,7 +336,20 @@ type TextProps = {
   maxLength?: number
 }
 
-function TextField({ id, label, value, onChange, type = 'text', optional, error, errorId, describedBy, autoComplete, inputMode, maxLength }: TextProps) {
+function TextField({
+  id,
+  label,
+  value,
+  onChange,
+  type = 'text',
+  optional,
+  error,
+  errorId,
+  describedBy,
+  autoComplete,
+  inputMode,
+  maxLength,
+}: TextProps) {
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={id} className="text-sm text-mist">
@@ -268,20 +372,40 @@ function TextField({ id, label, value, onChange, type = 'text', optional, error,
   )
 }
 
-type SelectProps = {
+type SelectProps<T extends string> = {
   id: string
   label: string
   optional?: string
   placeholder: string
-  value: string
-  onChange: (v: string) => void
-  options: [string, string][]
+  value: T | ''
+  onChange: (v: T | '') => void
+  options: readonly T[]
+  labels: Record<T, string>
   error?: string | false
   errorId: string
   describedBy?: string
 }
 
-function SelectField({ id, label, optional, placeholder, value, onChange, options, error, errorId, describedBy }: SelectProps) {
+function SelectField<T extends string>({
+  id,
+  label,
+  optional,
+  placeholder,
+  value,
+  onChange,
+  options,
+  labels,
+  error,
+  errorId,
+  describedBy,
+}: SelectProps<T>) {
+  // Valoarea din DOM e un text oarecare: o acceptăm doar dacă e '' sau una dintre opțiuni.
+  const pick = (raw: string) => {
+    if (raw === '') return onChange('')
+    const match = options.find((o) => o === raw)
+    if (match !== undefined) onChange(match)
+  }
+
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={id} className="text-sm text-mist">
@@ -291,7 +415,7 @@ function SelectField({ id, label, optional, placeholder, value, onChange, option
         <select
           id={id}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => pick(e.target.value)}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
           className={`${fieldClass(!!error, !value)} h-12 cursor-pointer appearance-none pr-8`}
@@ -300,13 +424,16 @@ function SelectField({ id, label, optional, placeholder, value, onChange, option
           <option value="" disabled={!optional} className="bg-ink text-paper">
             {placeholder}
           </option>
-          {options.map(([v, l]) => (
-            <option key={v} value={v} className="bg-ink text-paper">
-              {l}
+          {options.map((o) => (
+            <option key={o} value={o} className="bg-ink text-paper">
+              {labels[o]}
             </option>
           ))}
         </select>
-        <ChevronDown aria-hidden="true" className="pointer-events-none absolute right-0 top-1/2 size-4 -translate-y-1/2 text-mist" />
+        <ChevronDown
+          aria-hidden="true"
+          className="pointer-events-none absolute right-0 top-1/2 size-4 -translate-y-1/2 text-mist"
+        />
       </div>
       <FieldError id={errorId} message={error} />
     </div>
