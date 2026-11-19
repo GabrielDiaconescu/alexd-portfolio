@@ -73,6 +73,11 @@
 .barber-marquee {
   animation: barber-marquee 38s linear infinite;
 }
+.barber-marquee-wrap:hover .barber-marquee,
+.barber-marquee-wrap:focus-within .barber-marquee,
+.barber-marquee[data-paused='true'] {
+  animation-play-state: paused;
+}
 
 @keyframes dialog-in {
   from {
@@ -86,5 +91,8 @@
   .barber-marquee,
   dialog[open] {
     animation: none;
+  }
+  .barber-marquee-toggle {
+    display: none;
   }
 }

@@ -32,7 +32,7 @@ export function Wordmark() {
       ref={ref}
       aria-hidden="true"
       // leading 1.08: masca fiecărei litere are înălțimea rândului, deci trebuie să cuprindă și ascendentele.
-      className="-mb-[0.14em] -mt-[0.12em] select-none whitespace-nowrap font-display text-[clamp(3.5rem,15vw,11rem)] leading-[1.08] tracking-[-0.04em] text-paper"
+      className="-mb-[0.14em] -mt-[0.12em] select-none whitespace-nowrap font-display text-[3rem] leading-[1.08] tracking-[-0.04em] text-paper"
     >
       Alex D<span className="text-ember">.</span>
     </p>

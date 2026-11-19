@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { ArrowDown } from 'lucide-react'
 import type { Dictionary } from '@/content/dictionary'
 import { projects } from '@/content/projects'
 import { site } from '@/content/site'
@@ -16,11 +18,10 @@ export function Hero({ locale, dict }: Props) {
   return (
     <section id="intro" aria-labelledby="hero-title" className="relative flex min-h-[100svh] flex-col pb-8 pt-24 md:pt-28">
       <HeroExit className="shell flex flex-1 flex-col">
-        <FadeIn delay={0} className="flex items-center justify-between gap-6 t-label text-faint">
-          <span>
+        <FadeIn delay={0} className="t-label text-faint">
+          <p>
             {site.displayName} — {h.eyebrow}
-          </span>
-          <span className="hidden sm:inline">{site.disciplines.join(' · ')}</span>
+          </p>
         </FadeIn>
 
         <div className="mt-10 grid flex-1 grid-cols-12 items-center gap-x-6 gap-y-12 md:mt-14 lg:mt-6">
@@ -38,11 +39,16 @@ export function Hero({ locale, dict }: Props) {
                 <NoBreak text={h.lead} />
               </p>
             </FadeIn>
-            <FadeIn delay={0.7} className="mt-8 flex flex-col gap-3 sm:flex-row md:mt-10">
+            {/* Un singur buton principal; proiectele sunt o acțiune secundară, discretă, ca link. */}
+            <FadeIn delay={0.7} className="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-8 md:mt-10">
               <Button href={paths.section(locale, 'contact')}>{h.primary}</Button>
-              <Button href={paths.section(locale, 'work')} variant="matte" arrow={false}>
-                {h.secondary}
-              </Button>
+              <Link
+                href={paths.section(locale, 'work')}
+                className="group/link inline-flex min-h-12 items-center gap-2.5 text-[0.9375rem] font-medium text-mist transition-colors hover:text-paper"
+              >
+                <span className="border-b border-line-strong pb-0.5 transition-colors group-hover/link:border-ember">{h.secondary}</span>
+                <ArrowDown aria-hidden="true" className="size-4 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover/link:translate-y-0.5 motion-reduce:transition-none" />
+              </Link>
             </FadeIn>
           </div>
 

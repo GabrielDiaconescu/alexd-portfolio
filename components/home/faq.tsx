@@ -40,7 +40,7 @@ export function FaqList({ items, locale, t }: Props) {
             type="button"
             aria-pressed={filter === f}
             onClick={() => choose(f)}
-            className="inline-flex min-h-10 items-center gap-2 rounded-full border border-line-strong px-4 text-[0.875rem] text-mist transition-colors duration-300 hover:border-paper hover:text-paper aria-pressed:border-paper aria-pressed:bg-paper aria-pressed:text-ink"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line-strong px-4 text-[0.875rem] text-mist transition-colors duration-300 hover:border-paper hover:text-paper aria-pressed:border-paper aria-pressed:bg-paper aria-pressed:text-ink"
           >
             {f === 'all' ? t.all : t.topics[f]}
             <span className="font-mono text-[0.6875rem] opacity-60">{count(f)}</span>
@@ -48,7 +48,7 @@ export function FaqList({ items, locale, t }: Props) {
         ))}
       </div>
 
-      <motion.ul key={filter} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: ease.out }} className="mt-8 border-t border-line">
+      <motion.ul key={filter} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: ease.out }} className="mt-6 border-t border-line">
         {visible.map(({ item, i }) => {
           const isOpen = open === i
           const btn = `${base}-q${i}`
@@ -63,7 +63,7 @@ export function FaqList({ items, locale, t }: Props) {
                   aria-expanded={isOpen}
                   aria-controls={panel}
                   onClick={() => setOpen(isOpen ? null : i)}
-                  className="group grid w-full grid-cols-[2.75rem_1fr_auto] items-start gap-x-3 py-6 pl-3 text-left md:grid-cols-[3.75rem_1fr_auto] md:py-7 md:pl-5"
+                  className="group grid w-full grid-cols-[2.75rem_1fr_auto] items-start gap-x-3 py-5 pl-3 text-left md:grid-cols-[3.75rem_1fr_auto] md:py-6 md:pl-5"
                 >
                   <span className="t-label pt-[0.45em] text-faint transition-colors group-hover:text-ember group-aria-expanded:text-ember">
                     {String(i + 1).padStart(2, '0')}

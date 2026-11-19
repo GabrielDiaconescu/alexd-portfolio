@@ -35,6 +35,12 @@ export default function DemoLayout({ children }: { children: React.ReactNode }) 
         <noscript>
           <style>{'[data-reveal]{opacity:1!important;transform:none!important}'}</style>
         </noscript>
+        <a
+          href="#acasa"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-[#1b1714] focus:px-5 focus:py-3 focus:text-[#f3ede3]"
+        >
+          Sari la conținut
+        </a>
         <MotionProvider>{children}</MotionProvider>
       </body>
     </html>

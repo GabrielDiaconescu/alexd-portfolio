@@ -3,17 +3,16 @@ import { ArrowUpRight } from 'lucide-react'
 import type { ComponentProps, ReactNode } from 'react'
 
 /**
- * Materialele butoanelor (stilurile, în globals.css la .btn-*):
- *  - primary: titan alb-argintiu periat, pentru acțiunea principală;
- *  - matte:   albastru mat, granulat;
- *  - glass:   sticlă mată, pentru acțiunile secundare.
+ * Variantele butoanelor (stilurile, în globals.css la .btn-*):
+ *  - primary: plin, hârtie cu text cerneală; la hover devine jar (acțiunea principală);
+ *  - matte, glass: secundare, discrete, cu contur subțire. Arată la fel; ambele nume rămân pentru compatibilitate.
  */
 type Variant = 'primary' | 'matte' | 'glass'
 
 const variants: Record<Variant, string> = {
-  primary: 'btn-titanium',
-  matte: 'btn-matte',
-  glass: 'btn-glass',
+  primary: 'btn-solid',
+  matte: 'btn-quiet',
+  glass: 'btn-quiet',
 }
 
 type Props = Omit<ComponentProps<typeof Link>, 'className'> & {
@@ -25,7 +24,7 @@ type Props = Omit<ComponentProps<typeof Link>, 'className'> & {
 }
 
 export const buttonClass = (variant: Variant = 'primary', extra = '') =>
-  `btn ${variants[variant]} group/btn inline-flex min-h-12 items-center justify-center gap-3 px-7 text-[0.9375rem] font-medium tracking-[-0.005em] ${extra}`
+  `btn ${variants[variant]} group/btn inline-flex min-h-12 items-center justify-center gap-2.5 px-6 text-[0.9375rem] font-medium tracking-[-0.005em] ${extra}`
 
 /** Săgeata care iese pe diagonală și revine dinspre colțul opus. */
 export function ArrowSwap({ className = 'size-4' }: { className?: string }) {

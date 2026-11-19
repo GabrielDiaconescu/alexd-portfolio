@@ -41,6 +41,34 @@ const subscribeReduce = (cb: () => void) => {
 const getReduce = () => window.matchMedia(reduceQuery).matches
 const serverReduce = () => false
 
+/** Eșecurile cu variantă de rezervă rămân vizibile în dezvoltare, fără zgomot în producție. */
+function warn(context: string, error: unknown) {
+  if (process.env.NODE_ENV !== 'production') console.warn(`[LivePreview] ${context}`, error)
+}
+
+/**
+ * Callback de scroll care nu are voie să dărâme pagina. ScrollTrigger îl poate apela sincron chiar la creare, adică
+ * în efectul React al componentei: o excepție de acolo ajunge în ecranul de eroare Next și ia toată pagina cu ea.
+ */
+const safely = (context: string, fn: () => void) => () => {
+  try {
+    fn()
+  } catch (error) {
+    warn(context, error)
+  }
+}
+
+/**
+ * Ce are voie demo-ul din iframe. Fără allow-forms, allow-modals sau allow-downloads: nu le folosește.
+ *  - allow-scripts: e o pagină React interactivă;
+ *  - allow-same-origin: componenta îi derulează fereastra și îi ascultă tastele prin contentWindow, iar copierea
+ *    în clipboard și resursele sub CSP 'self' cer originea reală. Demo-ul e pagina noastră, servită doar pe același
+ *    domeniu (frame-ancestors 'self' în next.config.mjs), deci sandbox-ul e o plasă de siguranță, nu o izolare;
+ *  - allow-popups(+escape): linkul către hartă se deschide în filă nouă, iar linkurile tel: au nevoie de el;
+ *  - allow-top-navigation-by-user-activation: linkurile „înapoi la portofoliu” au target="_top".
+ */
+const SANDBOX = 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'
+
 // Aceleași curbe ca în Motion (lib/motion.ts), ca cele două biblioteci să se miște la fel.
 const bezier = ([a, b, c, d]: readonly number[]) => `M0,0 C${a},${b} ${c},${d} 1,1`
 let easesReady = false
@@ -111,7 +139,9 @@ export function LivePreview({ project: p, preview, locale, t, stage }: Props) {
     else if (win.current) {
       try {
         win.current.scrollTo({ top: value * liveTravel(win.current), behavior: 'instant' })
-      } catch {
+      } catch (error) {
+        // Fereastra demo-ului nu mai e accesibilă (a navigat în altă parte sau a fost scoasă): rămâne captura.
+        warn('nu pot derula demo-ul live', error)
         win.current = null
       }
     }
@@ -146,13 +176,26 @@ export function LivePreview({ project: p, preview, locale, t, stage }: Props) {
         const tr = track.current!
         const st = stageEl.current!
         const fr = frame.current!
+        // Nu quickSetter(fr, 'scale'): quickSetter traduce aliasul în „scaleX,scaleY”, care nu e o proprietate de
+        // transformare, deci GSAP ajunge la setAttribute('scaleX,scaleY'). Chrome-ul nou acceptă numele (și rama nu se
+        // scalează deloc), dar Safari pe iOS și Chrome-ul mai vechi de pe Android aruncă InvalidCharacterError: pe telefon
+        // eroarea pornește chiar la crearea ScrollTrigger-ului (rama e deja în ecran) și dărâmă pagina în ecranul de eroare Next.
+        const scaleX = gsap.quickSetter(fr, 'scaleX') as (v: number) => void
+        const scaleY = gsap.quickSetter(fr, 'scaleY') as (v: number) => void
         setters.current = {
           y: gsap.quickSetter(content.current!, 'y', 'px') as (v: number) => void,
-          scale: gsap.quickSetter(fr, 'scale') as (v: number) => void,
+          scale: (v) => {
+            scaleX(v)
+            scaleY(v)
+          },
           bar: gsap.quickSetter(bar.current!, 'scaleX') as (v: number) => void,
         }
         const stickTop = () => parseFloat(getComputedStyle(st).top) || 0
         const extra = () => spacer.current?.offsetHeight ?? 0
+        // Valoarea din CSS (pusă de React) se restaurează la curățare, nu se șterge: React nu o mai scrie la loc, iar
+        // demo-ul live n-o recalculează. Altfel, după o curățare (Strict Mode în dezvoltare, schimbarea „mișcării reduse”),
+        // rezerva rămânea 0 și parcurgerea sărea direct la 100%.
+        const cssExtra = tr.style.getPropertyValue('--lp-extra')
 
         // Cât scroll ține rama fixată: proporțional cu cât are de parcurs captura, între 0,6 și 1,6 ecrane.
         // Demo-ul live păstrează valoarea din CSS (pagina lui e lungă și se încarcă mai târziu).
@@ -182,7 +225,7 @@ export function LivePreview({ project: p, preview, locale, t, stage }: Props) {
         gsap.to(approach.current, {
           v: 1,
           ease: 'none',
-          onUpdate: applyApproach,
+          onUpdate: safely('apropierea ramei', applyApproach),
           scrollTrigger: { trigger: tr, start: 'top bottom', end: () => `top ${stickTop()}px`, scrub: 0.6 },
         })
 
@@ -190,13 +233,13 @@ export function LivePreview({ project: p, preview, locale, t, stage }: Props) {
         gsap.to(progress.current, {
           p: 1,
           ease: 'none',
-          onUpdate: apply,
+          onUpdate: safely('parcurgerea paginii', apply),
           scrollTrigger: { trigger: tr, start: () => `top ${stickTop()}px`, end: () => `+=${extra()}`, scrub: 0.8 },
         })
 
         return () => {
           ScrollTrigger.removeEventListener('refreshInit', sizeTrack)
-          tr.style.removeProperty('--lp-extra')
+          tr.style.setProperty('--lp-extra', cssExtra)
           gsap.set([content.current, fr, bar.current], { clearProps: 'transform' })
           setters.current = {}
           progress.current.p = 0
@@ -270,7 +313,8 @@ export function LivePreview({ project: p, preview, locale, t, stage }: Props) {
       fit()
       setPhase('ready')
       apply()
-    } catch {
+    } catch (error) {
+      warn(`demo-ul live nu s-a încărcat (${preview.mode === 'live' ? preview.src : ''})`, error)
       win.current = null
       setPhase('error')
     }
@@ -352,12 +396,23 @@ export function LivePreview({ project: p, preview, locale, t, stage }: Props) {
     const gap = window.innerWidth - html.clientWidth
     html.style.overflow = 'hidden'
     if (gap > 0) html.style.paddingRight = `${gap}px`
+    // Modal real: tot ce e în afara ramei devine inert (fără focus, clicuri sau cititor de ecran), urcând din ramă
+    // până la <body>. Fundalul rămâne activ, ca un clic pe el să închidă. Ce era deja inert nu e atins.
+    const inerted: HTMLElement[] = []
+    for (let el: HTMLElement | null = frame.current; el && el !== document.body; el = el.parentElement) {
+      for (const sibling of Array.from(el.parentElement?.children ?? [])) {
+        if (sibling === el || sibling === backdrop.current || !(sibling instanceof HTMLElement) || sibling.inert) continue
+        sibling.inert = true
+        inerted.push(sibling)
+      }
+    }
     const onFocus = (e: FocusEvent) => {
       if (frame.current && !frame.current.contains(e.target as Node)) closeBtn.current?.focus({ preventScroll: true })
     }
     document.addEventListener('keydown', onEscape)
     document.addEventListener('focusin', onFocus)
     return () => {
+      for (const el of inerted) el.inert = false
       html.style.overflow = before.overflow
       html.style.paddingRight = before.paddingRight
       document.removeEventListener('keydown', onEscape)
@@ -372,13 +427,17 @@ export function LivePreview({ project: p, preview, locale, t, stage }: Props) {
     try {
       inner = iframe.current?.contentWindow ?? null
       inner?.addEventListener('keydown', onEscape)
-    } catch {
+    } catch (error) {
+      // Escape din interiorul demo-ului nu va închide fereastra; butonul „Închide” rămâne.
+      warn('nu pot asculta tastele din demo', error)
       inner = null
     }
     return () => {
       try {
         inner?.removeEventListener('keydown', onEscape)
-      } catch {}
+      } catch {
+        // Curățare: fereastra demo-ului poate fi deja închisă sau navigată, deci nu mai e nimic de scos.
+      }
     }
   }, [expanded, phase])
 
@@ -493,6 +552,7 @@ export function LivePreview({ project: p, preview, locale, t, stage }: Props) {
                       src={preview.src}
                       title={`${t.iframe}: ${name}`}
                       onLoad={onFrameLoad}
+                      sandbox={SANDBOX}
                       inert={!expanded}
                       tabIndex={expanded ? 0 : -1}
                       referrerPolicy="same-origin"

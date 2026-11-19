@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowUp } from 'lucide-react'
 import type { Dictionary } from '@/content/dictionary'
@@ -28,8 +29,8 @@ export function Footer({ locale, dict }: Props) {
     <footer className="relative overflow-hidden border-t border-line pt-16 md:pt-24">
       <div className="shell grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-12">
         <div className="col-span-2 md:col-span-5">
+          {/* Fără lista de discipline (doar în engleză): sloganul spune același lucru, în limba paginii. */}
           <p className="max-w-sm text-mist">{dict.footer.tagline}</p>
-          <p className="mt-6 t-label text-faint">{site.disciplines.join(' · ')}</p>
         </div>
 
         <FooterCol title={dict.footer.nav} className="md:col-span-2 md:col-start-7">
@@ -66,9 +67,20 @@ export function Footer({ locale, dict }: Props) {
 
         <FooterCol title={dict.footer.legal} className="md:col-span-2">
           <li>
+            <Link href={paths.terms(locale)} className="hit text-mist transition-colors hover:text-paper">
+              {dict.footer.terms}
+            </Link>
+          </li>
+          <li>
             <Link href={paths.privacy(locale)} className="hit text-mist transition-colors hover:text-paper">
               {dict.footer.privacy}
             </Link>
+          </li>
+          <li className="pt-2">
+            {/* Pictograma oficială SAL (anpc.ro/sal), cerută de Ordinul ANPC 449/2022, modificat prin Ordinul 270/2026. */}
+            <a href="https://reclamatiisal.anpc.ro/" target="_blank" rel="noopener noreferrer" className="inline-block">
+              <Image src="/legal/anpc-sal.png" alt={dict.footer.sal} width={201} height={50} className="h-[50px] w-auto" />
+            </a>
           </li>
         </FooterCol>
       </div>

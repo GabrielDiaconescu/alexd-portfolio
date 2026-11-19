@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'motion/react'
 import { Check, Copy, MessageCircle, X } from 'lucide-react'
-import { useId, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react'
 import { allServices, groups, shop, slots } from './data'
 import { type BookableDay, bookableDays } from './time'
 
@@ -23,7 +23,8 @@ export function Booking() {
   const [day, setDay] = useState<string | null>(null)
   const [slot, setSlot] = useState<string | null>(null)
   const [name, setName] = useState('')
-  const [copied, setCopied] = useState(false)
+  const [copyState, setCopy] = useState<'idle' | 'copied' | 'failed'>('idle')
+  const timer = useRef(0)
   const dialog = useRef<HTMLDialogElement>(null)
   const uid = useId()
 
@@ -43,34 +44,45 @@ export function Booking() {
   const slotLabel = slots.find((s) => s.id === slot)
   const missing = [!chosen.length && 'un serviciu', !day && 'ziua', !slot && 'intervalul'].filter(Boolean) as string[]
 
-  const message = useMemo(
-    () =>
-      [
-        `Bună ziua! Aș dori o programare la ${shop.name}.`,
-        `• Servicii: ${chosen.map((s) => s.name).join(', ')}`,
-        `• Total estimat: ${total} lei (aprox. ${minutes} min)`,
-        `• Ziua: ${dayLabel ?? '—'}`,
-        `• Interval: ${slotLabel ? `${slotLabel.label.toLowerCase()} (${slotLabel.range})` : '—'}`,
-        name.trim() ? `Numele meu: ${name.trim()}` : null,
-        'Mulțumesc!',
-      ]
-        .filter(Boolean)
-        .join('\n'),
-    [chosen, total, minutes, dayLabel, slotLabel, name],
-  )
+  // Mesajul e ieftin de calculat: fără useMemo (dependențele s-ar schimba oricum la fiecare randare).
+  const message = [
+    `Bună ziua! Aș dori o programare la ${shop.name}.`,
+    `• Servicii: ${chosen.map((s) => s.name).join(', ')}`,
+    `• Total estimat: ${total} lei (aprox. ${minutes} min)`,
+    `• Ziua: ${dayLabel ?? '—'}`,
+    `• Interval: ${slotLabel ? `${slotLabel.label.toLowerCase()} (${slotLabel.range})` : '—'}`,
+    name.trim() ? `Numele meu: ${name.trim()}` : null,
+    'Mulțumesc!',
+  ]
+    .filter(Boolean)
+    .join('\n')
+
+  // Curăță cronometrul la demontare.
+  useEffect(() => () => window.clearTimeout(timer.current), [])
 
   const copy = async () => {
+    window.clearTimeout(timer.current)
     try {
       await navigator.clipboard.writeText(message)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setCopy('copied')
     } catch {
-      setCopied(false)
+      setCopy('failed')
     }
+    timer.current = window.setTimeout(() => setCopy('idle'), 2000)
   }
+
+  const announce = [
+    dayLabel && `Ziua aleasă: ${dayLabel}.`,
+    slotLabel && `Intervalul ales: ${slotLabel.label}, ${slotLabel.range}.`,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <div className="grid grid-cols-12 gap-x-6 gap-y-10">
+      <p role="status" className="sr-only">
+        {announce}
+      </p>
       {/* Lista de prețuri */}
       <div className="col-span-12 flex flex-col gap-12 lg:col-span-7">
         {groups.map((g) => (
@@ -239,14 +251,19 @@ export function Booking() {
             Acesta e un site demonstrativ: nimic nu se trimite. Pe site-ul unei frizerii reale, butonul ar deschide WhatsApp cu acest mesaj,
             gata de trimis către salon.
           </p>
+          {/* Rezultatul copierii, anunțat politicos (regiunea e în dialog, ca să fie citită cât timp pagina e inertă). */}
+          <p role="status" className={copyState === 'failed' ? 'mt-4 text-sm font-medium text-[#7a1f1f]' : 'sr-only'}>
+            {copyState === 'copied' && 'Mesajul a fost copiat.'}
+            {copyState === 'failed' && 'Nu s-a putut copia. Selectează textul și copiază-l manual.'}
+          </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <button
               type="button"
               onClick={copy}
               className="flex min-h-12 flex-1 items-center justify-center gap-2 bg-[#1b1714] px-5 text-[#f3ede3] transition-colors hover:bg-[#7a1f1f]"
             >
-              {copied ? <Check aria-hidden="true" className="size-4" /> : <Copy aria-hidden="true" className="size-4" />}
-              <span aria-live="polite">{copied ? 'Copiat' : 'Copiază mesajul'}</span>
+              {copyState === 'copied' ? <Check aria-hidden="true" className="size-4" /> : <Copy aria-hidden="true" className="size-4" />}
+              <span>{copyState === 'copied' ? 'Copiat' : 'Copiază mesajul'}</span>
             </button>
             <button type="button" onClick={() => dialog.current?.close()} className="min-h-12 flex-1 border border-[#1b1714]/30 px-5 hover:border-[#1b1714]">
               Închide

@@ -6,6 +6,7 @@ import { Booking } from '@/components/demo/barber/booking'
 import { groups, shop, team, values } from '@/components/demo/barber/data'
 import { HeroTitle } from '@/components/demo/barber/hero-title'
 import { OpenStatus, Schedule } from '@/components/demo/barber/live'
+import { ServiceMarquee } from '@/components/demo/barber/marquee'
 import { BarberPole } from '@/components/demo/barber/pole'
 
 export const metadata: Metadata = {
@@ -51,7 +52,7 @@ export default function BarberDemo() {
         </div>
       </header>
 
-      <main id="acasa" className="pb-24 md:pb-0">
+      <main id="acasa" tabIndex={-1} className="pb-24 md:pb-0">
         {/* Hero */}
         <section aria-labelledby="hero" className="mx-auto grid max-w-[84rem] grid-cols-12 items-center gap-x-6 gap-y-12 px-4 pb-16 pt-12 sm:px-8 md:pb-24 md:pt-16">
           <div id="hero" className="col-span-12 lg:col-span-7">
@@ -84,21 +85,7 @@ export default function BarberDemo() {
         </section>
 
         {/* Banda de servicii */}
-        <div className="overflow-hidden bg-[#7a1f1f] py-5 text-[#f3ede3]">
-          <p className="sr-only">Servicii: {serviceNames.join(', ')}.</p>
-          <div aria-hidden="true" className="barber-marquee flex w-max">
-            {[0, 1].map((copy) => (
-              <div key={copy} className="flex shrink-0 items-center">
-                {serviceNames.map((n) => (
-                  <span key={n} className="flex items-center whitespace-nowrap font-display text-[clamp(1.5rem,3vw,2.25rem)] italic">
-                    <span className="px-7">{n}</span>
-                    <Scissors className="size-5 text-[#e3c88f]" />
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
+        <ServiceMarquee names={serviceNames} />
 
         {/* Valori */}
         <section aria-labelledby="valori" className="mx-auto max-w-[84rem] px-4 py-20 sm:px-8 md:py-28">

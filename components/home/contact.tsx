@@ -5,6 +5,7 @@ import { type Locale, paths } from '@/lib/i18n'
 import { NoBreak } from '@/components/ui/accent'
 import { Button } from '@/components/ui/button'
 import { Reveal, SplitLines } from '@/components/ui/motion'
+import { CountUp } from '@/components/ui/react-bits'
 import { FaqList } from './faq'
 import { InquiryForm } from './inquiry-form'
 
@@ -14,23 +15,22 @@ export function FaqSection({ locale, dict }: Props) {
   const f = dict.faq
   const ask = <AskCard locale={locale} dict={dict} />
   return (
-    <section id="faq" aria-labelledby="faq-title" className="border-t border-line py-24 md:py-36">
-      <div className="shell grid grid-cols-12 gap-x-6 gap-y-14">
+    <section id="faq" aria-labelledby="faq-title" className="border-t border-line py-16 md:py-24">
+      <div className="shell grid grid-cols-12 gap-x-6 gap-y-10">
         <div className="col-span-12 lg:col-span-4">
-          <div className="lg:sticky lg:top-32">
+          <div className="lg:sticky lg:top-28">
             <div className="flex items-center gap-4 t-label text-faint">
-              <span>(06)</span>
               <span>{f.eyebrow}</span>
               <span aria-hidden="true" className="h-px flex-1 bg-line" />
             </div>
             <SplitLines lines={[f.title]} id="faq-title" className="mt-8 t-h2 text-balance" />
             <Reveal>
-              <p className="mt-6 max-w-[30rem] text-mist"><NoBreak text={f.intro} /></p>
-              <p className="mt-6 t-label text-faint">
-                <span className="text-paper">{faq.length}</span> {f.count}
+              <p className="mt-5 max-w-[30rem] text-mist"><NoBreak text={f.intro} /></p>
+              <p className="mt-5 t-label text-faint">
+                <CountUp to={faq.length} className="text-paper" /> {f.count}
               </p>
             </Reveal>
-            <Reveal className="mt-12 hidden lg:block">{ask}</Reveal>
+            <Reveal className="mt-10 hidden lg:block">{ask}</Reveal>
           </div>
         </div>
         <Reveal className="col-span-12 lg:col-span-8">
@@ -71,25 +71,24 @@ function AskCard({ locale, dict }: Props) {
 export function Contact({ locale, dict }: Props) {
   const c = dict.contact
   return (
-    <section id="contact" aria-labelledby="contact-title" className="relative overflow-hidden border-t border-line py-24 md:py-36">
+    <section id="contact" aria-labelledby="contact-title" className="relative overflow-hidden border-t border-line py-16 md:py-24">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-[20%] top-0 size-[60rem] rounded-full bg-[radial-gradient(closest-side,rgb(255_106_61/0.09),transparent)]"
       />
       <div className="shell relative">
         <div className="flex items-center gap-4 t-label text-faint">
-          <span>(07)</span>
           <span>{c.eyebrow}</span>
           <span aria-hidden="true" className="h-px flex-1 bg-line" />
         </div>
-        <SplitLines lines={c.title} id="contact-title" className="mt-10 t-display" />
+        <SplitLines lines={c.title} id="contact-title" className="mt-8 t-h1" />
 
-        <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-16 md:mt-24">
+        <div className="mt-10 grid grid-cols-12 gap-x-6 gap-y-12 md:mt-14">
           <Reveal className="col-span-12 lg:col-span-4">
             <p className="t-lead text-mist">
               <NoBreak text={c.intro} />
             </p>
-            <ol className="mt-10 border-t border-line">
+            <ol className="mt-8 border-t border-line">
               {c.steps.map((step, i) => (
                 <li key={i} className="flex gap-4 border-b border-line py-4">
                   <span className="t-label pt-1 text-ember">0{i + 1}</span>
@@ -100,7 +99,7 @@ export function Contact({ locale, dict }: Props) {
               ))}
             </ol>
 
-            <p className="mt-12 t-label text-faint">{c.direct}</p>
+            <p className="mt-10 t-label text-faint">{c.direct}</p>
             <ul className="mt-4 flex flex-col gap-2">
               {site.emails.map((e) => (
                 <li key={e}>
@@ -116,7 +115,7 @@ export function Contact({ locale, dict }: Props) {
               </li>
             </ul>
 
-            <p className="mt-10 t-label text-faint">{c.elsewhere}</p>
+            <p className="mt-8 t-label text-faint">{c.elsewhere}</p>
             <ul className="mt-3 flex gap-6">
               {site.socials.map((s) => (
                 <li key={s.href}>

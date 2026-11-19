@@ -20,51 +20,51 @@ export const services: Service[] = [
     id: 'website',
     name: { ro: 'Website-uri de prezentare', en: 'Business websites' },
     lead: {
-      ro: 'Ai o afacere, dar nu ai încă un site sau cel actual nu te mai reprezintă?',
-      en: 'You run a business, but have no website yet, or the current one no longer represents you?',
+      ro: 'Ai o afacere, dar nu ai încă un site?',
+      en: 'You run a business, but don’t have a website yet?',
     },
     body: {
-      ro: 'Creez site-ul de prezentare al firmei tale de la zero: structură, texte de interfață, design și cod. Clienții află repede cine ești, ce oferi și cum te contactează.',
-      en: 'I build your company website from scratch: structure, interface copy, design and code. Customers quickly see who you are, what you offer and how to reach you.',
+      ro: 'Fac site-ul firmei tale de la zero. Clienții văd repede cine ești, ce oferi și cum te contactează.',
+      en: 'I build your company website from scratch. Customers quickly see who you are, what you offer and how to reach you.',
     },
     listLabel: { ro: 'Ce include', en: 'What’s included' },
     items: {
-      ro: ['Design personalizat, nu un șablon', 'Pagini pentru servicii, prețuri și galerie', 'Telefon, WhatsApp și formular de contact', 'Adaptat pentru telefon, tabletă și desktop', 'SEO tehnic și încărcare rapidă', 'Publicare pe domeniul tău'],
-      en: ['A custom design, not a template', 'Pages for services, prices and gallery', 'Phone, WhatsApp and a contact form', 'Built for phone, tablet and desktop', 'Technical SEO and fast loading', 'Launch on your own domain'],
+      ro: ['Design făcut pentru tine, nu un șablon', 'Pagini pentru servicii, prețuri și galerie', 'Telefon, WhatsApp și formular de contact', 'Arată bine pe telefon, tabletă și calculator', 'Publicat pe domeniul tău', 'Se încarcă repede și e configurat pentru Google'],
+      en: ['A design made for you, not a template', 'Pages for services, prices and gallery', 'Phone, WhatsApp and a contact form', 'Looks right on phone, tablet and computer', 'Live on your own domain', 'Loads fast and is set up for Google'],
     },
   },
   {
     id: 'redesign',
     name: { ro: 'Redesign și modernizare', en: 'Redesign & modernisation' },
     lead: {
-      ro: 'Ai deja un site, dar arată învechit, se încarcă greu sau nu merge bine pe telefon?',
-      en: 'You already have a site, but it looks dated, loads slowly or doesn’t work well on a phone?',
+      ro: 'Ai deja un site, dar arată vechi sau merge greu pe telefon?',
+      en: 'You already have a site, but it looks dated or struggles on a phone?',
     },
     body: {
-      ro: 'Îl reconstruiesc păstrând ce funcționează: informațiile importante, adresele indexate în Google și identitatea firmei.',
-      en: 'I rebuild it while keeping what works: the key information, the addresses Google has indexed and your brand.',
+      ro: 'Îl refac și păstrez ce merge: informațiile importante, paginile pe care Google le știe deja și identitatea firmei.',
+      en: 'I rebuild it and keep what works: the key information, the pages Google already knows and your brand.',
     },
     listLabel: { ro: 'Ce include', en: 'What’s included' },
     items: {
-      ro: ['Design actualizat, pe identitatea firmei', 'Informații reorganizate, ușor de găsit', 'Experiență bună pe telefon', 'Viteză de încărcare mai mare', 'Redirecționări pentru paginile vechi', 'Actualizări și mentenanță după lansare'],
-      en: ['An updated design that keeps your brand', 'Information reorganised so it’s easy to find', 'A good experience on phones', 'Faster loading', 'Redirects for the old pages', 'Updates and maintenance after launch'],
+      ro: ['Design nou, păstrând identitatea firmei', 'Informații reorganizate, ușor de găsit', 'Ușor de folosit pe telefon', 'Se încarcă mai repede', 'Linkurile vechi duc la paginile noi', 'Mentenanță după lansare, dacă vrei'],
+      en: ['A new design that keeps your brand', 'Information reorganised so it’s easy to find', 'Easy to use on a phone', 'Loads faster', 'Old links lead to the new pages', 'Maintenance after launch, if you want it'],
     },
   },
   {
     id: 'custom',
-    name: { ro: 'Funcționalități și soluții personalizate', en: 'Custom features & solutions' },
+    name: { ro: 'Funcționalități personalizate', en: 'Custom features' },
     lead: {
-      ro: 'Vrei ca site-ul să lucreze pentru tine, nu doar să arate bine?',
-      en: 'Want your website to work for you, not just look good?',
+      ro: 'Vrei ca site-ul să facă și o parte din muncă?',
+      en: 'Want your website to take on some of the work?',
     },
     body: {
-      ro: 'Adaug funcțiile care îți scurtează munca zilnică și le ușurează clienților drumul până la o cerere.',
-      en: 'I add the features that cut down your daily work and make it easier for customers to get in touch.',
+      ro: 'Adaug funcții care îți economisesc timp și îi ajută pe clienți să-ți scrie mai ușor.',
+      en: 'I add features that save you time and make it easier for customers to get in touch.',
     },
     listLabel: { ro: 'Exemple', en: 'Examples' },
     items: {
-      ro: ['Programări online sau prin WhatsApp', 'Formulare de ofertă și de contact', 'Liste de prețuri și meniuri interactive', 'Panou simplu pentru texte, poze și prețuri', 'Integrări cu hărți, plăți sau facturare'],
-      en: ['Online or WhatsApp bookings', 'Quote and contact forms', 'Interactive price lists and menus', 'A simple panel for copy, photos and prices', 'Integrations with maps, payments or invoicing'],
+      ro: ['Programări online sau prin WhatsApp', 'Formulare de ofertă și de contact', 'Liste de prețuri și meniuri interactive', 'Un panou simplu ca să schimbi singur texte, poze și prețuri', 'Hărți, plăți online sau facturare, legate de site'],
+      en: ['Online or WhatsApp bookings', 'Quote and contact forms', 'Interactive price lists and menus', 'A simple panel to change copy, photos and prices yourself', 'Maps, online payments or invoicing, linked to the site'],
     },
   },
 ]
@@ -73,8 +73,8 @@ export const services: Service[] = [
 export const special = {
   title: { ro: 'Proiecte speciale, la cerere', en: 'Special projects, on request' } satisfies Localized,
   body: {
-    ro: 'Pentru idei care cer mai mult decât un site, lucrez și la proiecte dedicate. Le discutăm separat, ca să stabilim realist ce se poate face, în cât timp și cu ce buget.',
-    en: 'For ideas that need more than a website, I also take on dedicated projects. We discuss them separately to agree realistically on what can be done, how long it takes and what it costs.',
+    ro: 'Pentru idei care cer mai mult decât un site. Le discutăm separat și îți spun sincer ce se poate face, în cât timp și cu ce buget.',
+    en: 'For ideas that need more than a website. We discuss them separately, and I’ll tell you honestly what can be done, how long it takes and what it costs.',
   } satisfies Localized,
   items: {
     ro: ['Aplicații web cu conturi și bază de date', 'Aplicații mobile (React Native)', 'Integrări AI, de exemplu un asistent pentru clienți'],

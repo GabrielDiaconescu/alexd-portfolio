@@ -1,6 +1,19 @@
 import type { Locale, Localized } from '@/lib/i18n'
 
 /**
+ * În producție, lipsa NEXT_PUBLIC_SITE_URL oprește build-ul: altfel canonical-urile și sitemap-ul
+ * ar pleca cu localhost. În dezvoltare și în teste rămâne adresa locală.
+ */
+function siteUrl(): string {
+  const url = process.env.NEXT_PUBLIC_SITE_URL
+  if (url) return url
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('NEXT_PUBLIC_SITE_URL lipsește. Seteaz-o (ex. în .env.production) înainte de build.')
+  }
+  return 'http://localhost:3000'
+}
+
+/**
  * Datele tale, într-un singur loc. Tot site-ul citește de aici.
  * Câmpurile goale ('') sau null nu apar pe site.
  */
@@ -13,10 +26,14 @@ export const site = {
     ro: 'Dezvoltator web',
     en: 'Web developer',
   } satisfies Localized,
-  disciplines: ['Web Development', 'Web Design', 'Digital Solutions'],
+  /** Apar la fel în ambele limbi (prima pagină, subsol): doar termeni care nu se traduc. */
+  disciplines: ['Web design', 'Next.js', 'SEO'],
 
   /** Adresa finală a site-ului. Setează NEXT_PUBLIC_SITE_URL la publicare. */
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  url: siteUrl(),
+
+  /** Data ultimei modificări de conținut (AAAA-LL-ZZ), pentru sitemap. Schimb-o când editezi textele. */
+  updated: '2026-11-15',
 
   /** Singura adresă de contact, folosită în ambele limbi (contact, subsol, meniu, formular). */
   email: {
@@ -60,6 +77,9 @@ export const site = {
 
   /** [DE COMPLETAT] Data la care ai citit și aprobat politica de confidențialitate. Gol = nu apare. */
   privacyUpdated: { ro: '', en: '' } satisfies Localized,
+
+  /** Data ultimei modificări a termenilor și condițiilor (content/terms.ts). */
+  termsUpdated: { ro: '16 noiembrie 2026', en: '16 November 2026' } satisfies Localized,
 } as const
 
 export function emailFor(locale: Locale) {

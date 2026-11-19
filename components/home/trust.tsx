@@ -15,20 +15,18 @@ export function Trust({ locale, dict }: Props) {
   const published = testimonials.filter((q) => q.consent)
 
   return (
-    <section id="trust" aria-labelledby="trust-title" className="py-24 md:py-36">
+    <section id="trust" aria-labelledby="trust-title" className="border-t border-line py-16 md:py-24">
       <div className="shell">
-        <SectionHeading index="05" eyebrow={t.eyebrow} title={t.title} id="trust-title">
-          {published.length === 0 && <p className="t-lead text-mist">{t.intro}</p>}
-        </SectionHeading>
+        <SectionHeading eyebrow={t.eyebrow} title={t.title} id="trust-title" />
 
         {published.length > 0 && (
-          <div className="mt-16 md:mt-24">
+          <div className="mt-10 md:mt-14">
             <h3 className="t-label text-faint">{t.testimonials}</h3>
             <RevealGroup className="mt-6 grid gap-px bg-line md:grid-cols-2">
               {published.map((q, i) => {
                 const project = q.project ? getProject(q.project) : undefined
                 return (
-                  <RevealItem as="article" key={i} className="flex flex-col justify-between gap-10 bg-ink p-8 md:p-12">
+                  <RevealItem as="article" key={i} className="flex flex-col justify-between gap-8 bg-ink p-6 md:p-10">
                     <blockquote className="font-display text-[1.75rem] leading-[1.2] md:text-[2.125rem]">
                       {locale === 'ro' ? `„${q.quote.ro}”` : `“${q.quote.en}”`}
                     </blockquote>
@@ -51,20 +49,17 @@ export function Trust({ locale, dict }: Props) {
           </div>
         )}
 
-        <RevealGroup className="mt-16 grid gap-px border border-line bg-line sm:grid-cols-2 md:mt-24" gap={0.06}>
+        <RevealGroup className="mt-10 grid gap-px border border-line bg-line sm:grid-cols-2 md:mt-14" gap={0.06}>
           {standards.map((s, i) => (
-            <RevealItem key={i} className="flex flex-col gap-4 bg-ink p-8 md:p-10">
+            <RevealItem key={i} className="flex flex-col gap-3 bg-ink p-6 md:p-8">
               <span className="t-label text-ember">0{i + 1}</span>
               <h3 className="t-h3">{s.title[locale]}</h3>
               <p className="text-mist">{s.body[locale]}</p>
-              <p className="mt-auto border-t border-line pt-4 t-label text-faint">
-                {t.proof}: <span className="text-mist">{s.proof[locale]}</span>
-              </p>
             </RevealItem>
           ))}
         </RevealGroup>
 
-        <Reveal className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+        <Reveal className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
           <p className="t-label text-faint">{t.profiles}</p>
           <ul className="flex flex-wrap gap-x-8 gap-y-3">
             {site.socials.map((s) => (

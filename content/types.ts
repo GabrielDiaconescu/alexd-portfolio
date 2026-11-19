@@ -38,6 +38,8 @@ export type Project = {
   kind: ProjectKind
   kindLabel: Localized
   year: string
+  /** Data ultimei modificări (AAAA-LL-ZZ), pentru sitemap. */
+  updated: string
   category: Localized
   services: Localized<string[]>
   tags: string[]

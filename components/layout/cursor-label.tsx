@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 
 /**
- * O etichetă care urmărește mouse-ul peste elementele cu `data-cursor="Text"`.
- * Cursorul nativ rămâne vizibil; pe ecrane tactile și la „mișcare redusă” componenta nu face nimic.
+ * O etichetă mică, lângă cursor, peste elementele cu `data-cursor="Text"`.
+ * Cursorul nativ rămâne vizibil și neacoperit; doar pe pointer fin, nimic pe touch sau la „mișcare redusă”.
  */
 export function CursorLabel() {
   const reduce = useReducedMotion()
@@ -50,16 +50,15 @@ export function CursorLabel() {
         {label && (
           <motion.div
             key="cursor"
-            initial={{ scale: 0.4, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.4, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="-ml-12 -mt-12 grid size-24 place-items-center rounded-full bg-ember text-ink"
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            // Hârtie pe ink-2: 16,4:1. Decalată în dreapta-jos, ca să nu acopere ce e sub cursor.
+            className="ml-4 mt-5 flex items-center gap-1.5 whitespace-nowrap rounded-full border border-line-strong bg-ink-2/90 px-3 py-1.5 t-label text-paper"
           >
-            <span className="flex items-center gap-1 t-label !tracking-[0.1em]">
-              {label}
-              <ArrowUpRight className="size-3.5" />
-            </span>
+            {label}
+            <ArrowUpRight aria-hidden="true" className="size-3 text-ember" />
           </motion.div>
         )}
       </AnimatePresence>

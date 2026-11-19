@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation'
 import { getDictionary } from '@/content/dictionary'
 import { site } from '@/content/site'
 import { isLocale, locales } from '@/lib/i18n'
@@ -12,8 +13,9 @@ export function generateStaticParams() {
 }
 
 export default async function Image({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale: raw } = await params
-  const locale = isLocale(raw) ? raw : 'ro'
+  const { locale } = await params
+  // Limbă necunoscută: 404, nu imaginea în română.
+  if (!isLocale(locale)) notFound()
   const title = getDictionary(locale).hero.title.join(' ').replace(/\*/g, '')
   return renderOg({ eyebrow: site.role[locale], title, footer: site.email[locale] })
 }

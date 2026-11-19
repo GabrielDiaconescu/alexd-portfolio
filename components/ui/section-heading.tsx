@@ -2,19 +2,17 @@ import type { ReactNode } from 'react'
 import { SplitLines } from './motion'
 
 type Props = {
-  index: string
   eyebrow: string
   title: string
   id: string
   children?: ReactNode
 }
 
-/** Antetul de secțiune: index mono + regulă subțire, apoi titlul mare. */
-export function SectionHeading({ index, eyebrow, title, id, children }: Props) {
+/** Antetul de secțiune: eticheta mono + regulă subțire, apoi titlul mare. Fără numere (01)…(07), la cererea ta. */
+export function SectionHeading({ eyebrow, title, id, children }: Props) {
   return (
     <header className="grid grid-cols-12 gap-x-6 gap-y-8">
       <div className="col-span-12 flex items-center gap-4 t-label text-faint">
-        <span>({index})</span>
         <span>{eyebrow}</span>
         <span className="h-px flex-1 bg-line" aria-hidden="true" />
       </div>

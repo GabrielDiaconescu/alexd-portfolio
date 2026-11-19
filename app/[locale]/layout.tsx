@@ -11,9 +11,10 @@ import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { CursorLabel } from '@/components/layout/cursor-label'
 import { SmoothAnchors } from '@/components/layout/smooth-anchors'
+import { SmoothScroll } from '@/components/layout/smooth-scroll'
 import { MotionProvider } from '@/components/ui/motion'
 import { fontVariables } from '@/lib/fonts'
-import { isLocale, locales, paths } from '@/lib/i18n'
+import { defaultLocale, isLocale, languageAlternates, locales, ogLocales, paths } from '@/lib/i18n'
 
 export const dynamicParams = false
 
@@ -40,13 +41,12 @@ export async function generateMetadata({ params }: LayoutProps<'/[locale]'>): Pr
     robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
     alternates: {
       canonical: paths.home(locale),
-      languages: { ro: paths.home('ro'), en: paths.home('en'), 'x-default': paths.home('ro') },
+      languages: { ...languageAlternates(paths.home), 'x-default': paths.home(defaultLocale) },
     },
     openGraph: {
       type: 'website',
       siteName: site.displayName,
-      locale: locale === 'ro' ? 'ro_RO' : 'en_US',
-      alternateLocale: locale === 'ro' ? 'en_US' : 'ro_RO',
+      ...ogLocales(locale),
       title: dict.meta.title,
       description: dict.meta.description,
       url: paths.home(locale),
@@ -132,7 +132,8 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
         </noscript>
         <a
           href="#main"
-          className="fixed left-4 top-4 z-[80] -translate-y-24 bg-ember px-4 py-3 text-ink transition-transform focus:translate-y-0"
+          // sr-only, nu translate în afara ecranului: pe iPhone, Safari arată și zona de deasupra paginii la derulare.
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:bg-ember focus:px-4 focus:py-3 focus:text-ink"
         >
           {dict.skip}
         </a>
@@ -144,6 +145,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
           </main>
           <Footer locale={locale} dict={dict} />
           <CursorLabel />
+          <SmoothScroll />
           <SmoothAnchors />
           <ButtonTilt />
         </MotionProvider>

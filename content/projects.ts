@@ -3,6 +3,7 @@ import type { Project } from './types'
 /**
  * Proiectele, în ordinea afișării. Ca să adaugi unul: copiază un bloc, schimbă slug-ul
  * și pune imaginile în public/work/<slug>/. Ordinea din listă = ordinea de pe site.
+ * Când modifici un proiect, schimbă-i și `updated` (data apare în sitemap).
  *
  * Toate proiectele sunt demonstrative (de prezentare), nu lucrări pentru clienți. Cifrele de mai jos
  * sunt măsurători tehnice din codul proiectelor. Nu adăuga cifre de business (vânzări, trafic, cereri).
@@ -16,29 +17,30 @@ export const projects: Project[] = [
     name: { ro: 'Spălătorie de camioane', en: 'Truck & fleet wash' },
     ...demo,
     year: '2026',
+    updated: '2026-11-15',
     category: { ro: 'Website de prezentare', en: 'Business website' },
     services: {
-      ro: ['Web design', 'Development', 'Formulare & e-mail'],
+      ro: ['Web design', 'Dezvoltare', 'Formulare și e-mail'],
       en: ['Web design', 'Development', 'Forms & email'],
     },
     tags: ['Next.js', 'TypeScript', 'Resend'],
     summary: {
-      ro: 'Site de prezentare pentru o spălătorie de TIR-uri, capete tractor și semiremorci, cu cereri de programare online.',
-      en: 'A business website for a wash bay serving trucks, tractor units and semi-trailers, with online booking requests.',
+      ro: 'Site pentru o spălătorie de camioane: serviciile, programul și o cerere de programare, toate ușor de folosit pe telefon.',
+      en: 'A website for a truck wash: services, opening hours and a booking request, all easy to use on a phone.',
     },
     problem: {
-      ro: 'Transportatorii și dispecerii caută de pe telefon, între două curse. Site-ul trebuia să arate în câteva secunde serviciile și programul și să transforme vizita într-o programare sau un apel.',
-      en: 'Hauliers and dispatchers search on a phone, between runs. The site had to show the services and hours within seconds and turn a visit into a booking or a call.',
+      ro: 'Transportatorii caută de pe telefon, între două curse. Site-ul trebuia să arate repede serviciile și programul și să ducă la o programare sau la un apel.',
+      en: 'Hauliers search on a phone, between runs. The site had to show the services and hours fast and lead to a booking or a call.',
     },
     highlights: {
       ro: [
-        'Serviciile explicate pe limba flotelor, de la spălarea exterioară la contracte B2B',
+        'Servicii explicate pe limba transportatorilor, de la spălare la contracte pentru firme',
         'Cerere de programare în câțiva pași, confirmată apoi telefonic',
         'Bară fixă cu „Sună acum” și WhatsApp pe orice telefon',
         'Video în prima pagină, redus de la 5,2 MB la 1,2 MB',
       ],
       en: [
-        'Services explained in the language of fleets, from exterior wash to B2B contracts',
+        'Services explained in hauliers’ terms, from washing to company contracts',
         'A booking request in a few steps, then confirmed by phone',
         'A sticky “Call now” and WhatsApp bar on every phone',
         'A home page video cut from 5.2 MB to 1.2 MB',
@@ -82,12 +84,12 @@ export const projects: Project[] = [
     links: { live: null, repo: null },
     caseStudy: {
       context: {
-        ro: 'Proiect demonstrativ: site-ul unei spălătorii pentru camioane, capete tractor și semiremorci, gândit pentru transportatori din România și din străinătate. Scopul: să explice serviciile pentru flote și să primească cereri de programare. Datele de contact sunt de exemplu.',
-        en: 'A demo project: the website of a wash for trucks, tractor units and semi-trailers, designed for hauliers from Romania and abroad. The goal: explain the fleet services and take booking requests. Contact details are sample data.',
+        ro: 'Proiect demonstrativ: site-ul unei spălătorii pentru camioane și semiremorci, pentru transportatori din țară și din străinătate. Scopul: să explice serviciile și să primească cereri de programare. Datele de contact sunt de exemplu.',
+        en: 'A demo project: the website of a wash for trucks and semi-trailers, for hauliers from Romania and abroad. The goal: explain the services and take booking requests. Contact details are sample data.',
       },
       challenge: {
-        ro: 'Clienții sunt transportatori și dispeceri care caută repede, de cele mai multe ori de pe telefon: ce servicii există, care e programul, cum fac o programare. Site-ul trebuia să răspundă în câteva secunde, să meargă pe orice telefon și să nu piardă nicio cerere.',
-        en: 'Customers are hauliers and dispatchers searching in a hurry, usually on a phone: which services exist, what the hours are, how to book. The site had to answer within seconds, work on any phone and never lose a request.',
+        ro: 'Clienții caută în grabă, de obicei de pe telefon: ce servicii sunt, care e programul, cum fac o programare. Site-ul trebuia să răspundă repede, să meargă pe orice telefon și să nu piardă nicio cerere.',
+        en: 'Customers search in a hurry, usually on a phone: which services there are, what the hours are, how to book. The site had to answer fast, work on any phone and never lose a request.',
       },
       objectives: {
         ro: [
@@ -95,14 +97,14 @@ export const projects: Project[] = [
           'Telefonul și WhatsApp la un deget distanță, pe orice ecran de mobil',
           'Video de fundal fără să încetinească pagina',
           'Formulare care ajung sigur în e-mailul firmei',
-          'Accesibilitate WCAG 2.1 AA și securitate de producție',
+          'Accesibilitate după standardul WCAG 2.1 AA și formulare protejate',
         ],
         en: [
           'A booking request in a few steps, then confirmed by phone',
           'Phone and WhatsApp one tap away on every mobile screen',
           'A background video that does not slow the page down',
           'Forms that reliably reach the business inbox',
-          'WCAG 2.1 AA accessibility and production-grade security',
+          'WCAG 2.1 AA accessibility and protected forms',
         ],
       },
       role: {
@@ -110,36 +112,36 @@ export const projects: Project[] = [
         en: ['Page structure and interface copy', 'Visual design and components', 'Next.js + TypeScript development', 'API routes, validation, email via Resend', 'Automated tests and browser checks', 'Handover documentation'],
       },
       direction: {
-        ro: 'Industrial și curat: alb, grafit și un singur albastru pentru acțiuni. Videoul de fundal stă în hero, sub un strat închis care păstrează contrastul textului la cel puțin 7,59:1.',
-        en: 'Industrial and clean: white, graphite and a single blue for actions. The background video sits in the hero, under a dark overlay that keeps text contrast at 7.59:1 or better.',
+        ro: 'Industrial și curat: alb, grafit și un singur albastru pentru butoane. Peste videoul din partea de sus stă un strat închis, ca textul să rămână ușor de citit (contrast de cel puțin 7,59:1).',
+        en: 'Industrial and clean: white, graphite and a single blue for buttons. A dark layer over the top video keeps the text easy to read (contrast of 7.59:1 or better).',
       },
       process: [
         {
           title: { ro: 'Structură', en: 'Structure' },
           body: {
-            ro: 'Cinci pagini (Acasă, Servicii, Despre, Contact, pagini legale) și toate datele firmei într-un singur fișier, ca o schimbare de program sau de telefon să se facă într-un loc.',
-            en: 'Five pages (Home, Services, About, Contact, legal) with every business detail in a single file, so a change of hours or phone number happens in one place.',
+            ro: 'Cinci pagini și toate datele firmei într-un singur fișier. Programul sau telefonul se schimbă într-un singur loc.',
+            en: 'Five pages, with every business detail in a single file. Hours or phone number change in one place.',
           },
         },
         {
           title: { ro: 'Design', en: 'Design' },
           body: {
-            ro: 'Componente simple, cu ținte de atingere de minimum 44 px și contraste calculate pentru fiecare pereche de culori.',
-            en: 'Simple components with 44 px minimum touch targets and a contrast ratio calculated for every colour pair.',
+            ro: 'Butoane ușor de apăsat cu degetul (minimum 44 px) și contrast verificat pentru fiecare pereche de culori.',
+            en: 'Buttons easy to tap with a finger (44 px minimum) and contrast checked for every colour pair.',
           },
         },
         {
           title: { ro: 'Dezvoltare', en: 'Development' },
           body: {
-            ro: 'Pagini generate static, iar cele două formulare au rute API pe server. Singurele dependențe de producție sunt next, react și react-dom.',
-            en: 'Statically generated pages; the two forms have server-side API routes. The only production dependencies are next, react and react-dom.',
+            ro: 'Pagini generate dinainte, ca să se încarce repede; formularele au rute API pe server. Doar trei dependențe de producție: next, react și react-dom.',
+            en: 'Pages generated ahead of time so they load fast; the forms have server-side API routes. Only three production dependencies: next, react and react-dom.',
           },
         },
         {
           title: { ro: 'Verificare', en: 'Verification' },
           body: {
-            ro: 'Teste unitare, un test end-to-end cu un server de e-mail fals și o verificare automată în Chrome la lățimi între 320 și 1440 px: scroll orizontal, tastatură, consolă, LCP și CLS.',
-            en: 'Unit tests, an end-to-end test against a fake email server and an automated Chrome check from 320 to 1440 px: horizontal scroll, keyboard, console, LCP and CLS.',
+            ro: 'Teste automate, inclusiv unul care trimite formularul către un server de e-mail fals. Plus o verificare în Chrome de la 320 la 1440 px: scroll orizontal, tastatură, consolă, LCP și CLS.',
+            en: 'Automated tests, including one that sends the form to a fake email server. Plus a Chrome check from 320 to 1440 px: horizontal scroll, keyboard, console, LCP and CLS.',
           },
         },
       ],
@@ -147,22 +149,22 @@ export const projects: Project[] = [
         {
           title: { ro: 'Videoul optimizat, nu eliminat', en: 'Optimise the video, don’t drop it' },
           body: {
-            ro: 'Videoul sursă avea 5,2 MB. Acum are 1,2 MB pe desktop și 0,6 MB pe mobil, se încarcă abia după pagină, nu pornește dacă vizitatorul economisește date sau a cerut mișcare redusă și are buton de pauză.',
-            en: 'The source video was 5.2 MB. It now weighs 1.2 MB on desktop and 0.6 MB on mobile, loads after the page, stays still for visitors on data saver or reduced motion, and has a pause button.',
+            ro: 'Videoul sursă avea 5,2 MB. Acum are 1,2 MB pe desktop și 0,6 MB pe mobil și se încarcă după restul paginii. Nu pornește pentru cine economisește date sau a cerut mișcare redusă și are buton de pauză.',
+            en: 'The source video was 5.2 MB. It now weighs 1.2 MB on desktop and 0.6 MB on mobile and loads after the rest of the page. It stays still on data saver or reduced motion, and has a pause button.',
           },
         },
         {
           title: { ro: 'Formulare protejate, fără biblioteci', en: 'Protected forms, no libraries' },
           body: {
-            ro: 'Aceeași validare rulează în browser și pe server. Un câmp-capcană oprește roboții fără CAPTCHA, iar o limită de 5 trimiteri în 10 minute și verificarea originii opresc abuzurile. E-mailul pleacă printr-un simplu fetch către Resend.',
-            en: 'The same validation runs in the browser and on the server. A honeypot field stops bots without a CAPTCHA; a 5-per-10-minutes limit and an origin check stop abuse. Email goes out through a plain fetch to Resend.',
+            ro: 'Spamul e oprit fără CAPTCHA: un câmp ascuns prinde roboții, iar o limită de 5 trimiteri în 10 minute și verificarea originii opresc abuzurile. Aceeași validare rulează în browser și pe server, iar e-mailul pleacă prin Resend.',
+            en: 'Spam is stopped without a CAPTCHA: a hidden field catches bots, and a 5-per-10-minutes limit plus an origin check stop abuse. The same validation runs in the browser and on the server, and email goes out through Resend.',
           },
         },
         {
           title: { ro: 'Mesaje sincere', en: 'Honest messages' },
           body: {
-            ro: 'Dacă trimiterea e-mailului nu e configurată, formularul spune asta și oferă numărul de telefon. Nu afișează niciodată „Mesaj trimis” pentru o cerere care nu a plecat.',
-            en: 'When email delivery is not configured, the form says so and offers the phone number. It never shows “Message sent” for a request that did not leave.',
+            ro: 'Dacă trimiterea pe e-mail nu e configurată, formularul spune asta și dă numărul de telefon. Nu scrie niciodată „Mesaj trimis” dacă cererea nu a plecat.',
+            en: 'When email delivery is not configured, the form says so and gives the phone number. It never shows “Message sent” for a request that did not leave.',
           },
         },
         {
@@ -233,29 +235,30 @@ export const projects: Project[] = [
     name: { ro: 'Briciul — Frizerie', en: 'Briciul — Barbershop' },
     ...demo,
     year: '2026',
+    updated: '2026-11-15',
     category: { ro: 'Website pentru servicii locale', en: 'Local business website' },
     services: {
-      ro: ['Web design', 'Front-end', 'Motion'],
+      ro: ['Web design', 'Front-end', 'Animație'],
       en: ['Web design', 'Front-end', 'Motion'],
     },
     tags: ['Next.js', 'React', 'Motion', 'SVG'],
     summary: {
-      ro: 'Site pentru o frizerie de cartier, cu un configurator de servicii care pregătește programarea pe WhatsApp.',
-      en: 'A website for a neighbourhood barbershop, with a service builder that prepares the WhatsApp booking.',
+      ro: 'Site pentru o frizerie: clientul alege serviciile, vede prețul și durata și primește mesajul de programare gata scris pentru WhatsApp.',
+      en: 'A website for a barbershop: customers pick services, see the price and time, and get a booking message ready to send on WhatsApp.',
     },
     problem: {
-      ro: 'Frizeria primește programări la telefon și pe WhatsApp, fără un sistem de rezervări cu abonament. Site-ul trebuia să transforme interesul vizitatorului într-un mesaj complet: servicii, preț, durată, zi și oră.',
-      en: 'The barbershop takes bookings by phone and WhatsApp, with no subscription booking system. The site had to turn a visitor’s interest into a complete message: services, price, duration, day and time.',
+      ro: 'Frizeria ia programări la telefon și pe WhatsApp, fără un sistem de rezervări plătit lunar. Site-ul trebuia să ducă la un mesaj complet: servicii, preț, durată, zi și oră.',
+      en: 'The barbershop takes bookings by phone and WhatsApp, with no monthly-paid booking system. The site had to lead to a complete message: services, price, duration, day and time.',
     },
     highlights: {
       ro: [
-        'Configurator: alegi serviciile și vezi prețul și durata',
+        'Alegi serviciile și vezi pe loc prețul și durata',
         'Mesaj de programare pregătit automat pentru WhatsApp',
         'Programul afișat pe loc: deschis acum sau când se deschide',
         'Design personalizat, gândit întâi pentru telefon',
       ],
       en: [
-        'Builder: pick services and see the price and duration',
+        'Pick services and see the price and duration instantly',
         'A booking message prepared automatically for WhatsApp',
         'Opening hours shown live: open now, or when it opens next',
         'A custom design, built for the phone first',
@@ -283,12 +286,12 @@ export const projects: Project[] = [
     links: { live: '/demo/frizerie', repo: null },
     caseStudy: {
       context: {
-        ro: 'Proiect demonstrativ: site-ul unei frizerii fictive, „Briciul”. Numele, adresa, telefonul, echipa și prețurile sunt date de exemplu, iar demo-ul se poate deschide și folosi direct din portofoliu.',
-        en: 'A demo project: the website of a fictional barbershop, “Briciul”. The name, address, phone, team and prices are sample data, and the demo can be opened and used straight from the portfolio.',
+        ro: 'Proiect demonstrativ: site-ul unei frizerii fictive, „Briciul”. Numele, adresa, telefonul, echipa și prețurile sunt de exemplu. Demo-ul se poate deschide și folosi direct din portofoliu.',
+        en: 'A demo project: the website of a fictional barbershop, “Briciul”. The name, address, phone, team and prices are sample data. The demo can be opened and used straight from the portfolio.',
       },
       challenge: {
-        ro: 'O frizerie mică primește programări la telefon și pe WhatsApp, nu printr-un sistem de rezervări cu abonament. Site-ul trebuia să transforme interesul vizitatorului într-un mesaj de programare complet: ce servicii, cât costă, cât durează, în ce zi și la ce oră.',
-        en: 'A small barbershop takes bookings by phone and WhatsApp, not through a subscription booking system. The site had to turn a visitor’s interest into a complete booking message: which services, what it costs, how long it takes, which day and when.',
+        ro: 'O frizerie mică nu are nevoie de un sistem de rezervări cu abonament. Are nevoie ca mesajul clientului să vină complet: ce servicii, cât costă, cât durează, în ce zi și la ce oră.',
+        en: 'A small barbershop doesn’t need a subscription booking system. It needs the customer’s message to arrive complete: which services, what it costs, how long it takes, which day and when.',
       },
       objectives: {
         ro: [
@@ -311,8 +314,8 @@ export const projects: Project[] = [
         en: ['Concept and visual identity', 'Interface design, desktop and mobile', 'SVG barber pole illustration', 'Next.js + React front-end', 'The booking builder', 'Animation and accessibility'],
       },
       direction: {
-        ro: 'Frizerie clasică, citită editorial: fildeș, espresso, vișiniu și alamă. Fraunces pentru titluri și prețuri, Archivo îngustat pentru etichete. În locul fotografiilor, un stâlp de frizerie desenat în SVG, într-o vitrină arcuită, cu dungi care urcă la nesfârșit.',
-        en: 'A classic barbershop read through an editorial lens: ivory, espresso, oxblood and brass. Fraunces for headlines and prices, condensed Archivo for labels. Instead of photography, an SVG barber pole in an arched shop window, its stripes rising endlessly.',
+        ro: 'Frizerie clasică, în culori calde: fildeș, espresso, vișiniu și alamă. În locul fotografiilor, un stâlp de frizerie desenat în SVG, cu dungi care urcă la nesfârșit. Fonturi: Fraunces pentru titluri și prețuri, Archivo îngustat pentru etichete.',
+        en: 'A classic barbershop in warm colours: ivory, espresso, oxblood and brass. Instead of photography, an SVG barber pole with stripes rising endlessly. Type: Fraunces for headlines and prices, condensed Archivo for labels.',
       },
       process: [
         {
@@ -355,15 +358,15 @@ export const projects: Project[] = [
         {
           title: { ro: 'Demo onest', en: 'An honest demo' },
           body: {
-            ro: 'Pe un site real, butonul ar deschide WhatsApp. Aici, mesajul apare într-un dialog și se poate copia, fără să plece nicăieri. Banda de sus spune clar că datele sunt de exemplu.',
-            en: 'On a real site, the button would open WhatsApp. Here the message appears in a dialog and can be copied, without being sent anywhere. The top banner states clearly that the data is sample data.',
+            ro: 'Pe un site real, butonul ar deschide WhatsApp. Aici mesajul apare într-o fereastră și se poate copia, dar nu se trimite. Banda de sus spune clar că datele sunt de exemplu.',
+            en: 'On a real site, the button would open WhatsApp. Here the message appears in a dialog and can be copied, but nothing is sent. The top banner states clearly that the data is sample data.',
           },
         },
         {
           title: { ro: 'Ora României, oriunde', en: 'Romanian time, anywhere' },
           body: {
-            ro: '„Deschis acum”, ziua evidențiată din program și zilele disponibile se calculează în fusul orar Europe/Bucharest, doar în browser, deci nu apar nepotriviri între server și client.',
-            en: '“Open now”, today’s highlighted row and the bookable days are calculated in the Europe/Bucharest time zone, in the browser only, so server and client never disagree.',
+            ro: '„Deschis acum”, ziua de azi din program și zilele libere se calculează după ora României (Europe/Bucharest), direct în browser. Așa, serverul și pagina nu se contrazic.',
+            en: '“Open now”, today’s row in the hours and the bookable days are calculated in Romanian time (Europe/Bucharest), in the browser. That way server and page never disagree.',
           },
         },
         {
@@ -434,31 +437,32 @@ export const projects: Project[] = [
     name: { ro: 'CodeSprint', en: 'CodeSprint' },
     ...personal,
     year: '2026',
+    updated: '2026-11-15',
     category: { ro: 'Aplicație educațională', en: 'Educational app' },
     services: {
-      ro: ['Product design', 'Development', 'Backend'],
+      ro: ['Design de produs', 'Dezvoltare', 'Backend'],
       en: ['Product design', 'Development', 'Backend'],
     },
     tags: ['React Native', 'Expo', 'Supabase'],
     summary: {
-      ro: 'Aplicație mobilă pentru învățat Python, cu lecții scurte, exerciții verificate și progres salvat în cont.',
-      en: 'A mobile app for learning Python, with short lessons, checked exercises and progress saved to an account.',
+      ro: 'Aplicație pentru învățat Python: lecții de câteva minute, exerciții verificate și progres salvat în cont.',
+      en: 'An app for learning Python: lessons of a few minutes, checked exercises and progress saved to an account.',
     },
     problem: {
-      ro: 'O aplicație educațională trebuie să fie corectă și să motiveze zilnic. Scopul a fost un produs complet, de la specificație la bază de date și teste, nu doar câteva ecrane.',
-      en: 'An educational app has to be correct and motivating every day. The goal was a complete product, from specification to database and tests, not just a few screens.',
+      ro: 'O aplicație de învățat trebuie să fie corectă și să te facă să revii zilnic. Scopul: un produs complet, cu bază de date și teste, nu doar câteva ecrane.',
+      en: 'A learning app has to be correct and bring you back every day. The goal: a complete product, with a database and tests, not just a few screens.',
     },
     highlights: {
       ro: [
         'Lecții de câteva minute, cu exemple de cod',
         'Exerciții cu verificarea răspunsurilor',
-        'XP, serii zilnice și clasamente protejate pe server',
+        'XP, serii zilnice și clasamente calculate pe server, fără trișat',
         'Mod invitat, cu progresul păstrat la crearea contului',
       ],
       en: [
         'Lessons of a few minutes, with code examples',
         'Exercises with answer checking',
-        'XP, daily streaks and leaderboards protected on the server',
+        'XP, daily streaks and leaderboards calculated on the server, so no cheating',
         'Guest mode that keeps progress when an account is created',
       ],
     },
@@ -483,12 +487,12 @@ export const projects: Project[] = [
     links: { live: null, repo: null },
     caseStudy: {
       context: {
-        ro: 'Proiect personal: o aplicație mobilă construită cap-coadă, de la specificație la backend și teste, ca să arate lucrul pe un produs complet. „CodeSprint” este un nume de lucru.',
-        en: 'A personal project: a mobile app built end to end, from specification to backend and tests, to show work on a complete product. “CodeSprint” is a working name.',
+        ro: 'Proiect personal: o aplicație mobilă făcută cap-coadă, de la specificație la backend și teste. „CodeSprint” este un nume de lucru.',
+        en: 'A personal project: a mobile app built end to end, from specification to backend and tests. “CodeSprint” is a working name.',
       },
       challenge: {
-        ro: 'O aplicație educațională trebuie să fie corectă, pentru că o lecție care afirmă un rezultat greșit distruge încrederea. Trebuie să motiveze zilnic fără să poată fi trișată și să respecte regulile pentru utilizatorii minori.',
-        en: 'An educational app has to be correct, because one lesson that claims the wrong output destroys trust. It has to motivate daily without being cheatable, and respect the rules for underage users.',
+        ro: 'O singură lecție cu un rezultat greșit strică încrederea. Aplicația trebuia să fie corectă, să motiveze zilnic fără să poată fi trișată și să respecte regulile pentru minori.',
+        en: 'A single lesson with the wrong output destroys trust. The app had to be correct, motivate daily without being cheatable, and respect the rules for underage users.',
       },
       objectives: {
         ro: ['Lecții de câteva minute, gândite pentru telefon', 'Conținut corect, verificat automat', 'XP și clasamente care nu pot fi falsificate din aplicație', 'Mod invitat, cu progresul păstrat la crearea contului', 'Protecții pentru minori, impuse de baza de date'],
@@ -527,8 +531,8 @@ export const projects: Project[] = [
         {
           title: { ro: 'Lansare', en: 'Release' },
           body: {
-            ro: 'Trei variante de build instalabile în paralel, capturi pentru magazine generate direct din aplicație și actualizări OTA pentru corecturi.',
-            en: 'Three build variants installable side by side, store screenshots generated from the app itself and OTA updates for fixes.',
+            ro: 'Trei variante ale aplicației, instalabile în paralel, capturi pentru magazine generate din aplicație și actualizări OTA (fără reinstalare) pentru corecturi.',
+            en: 'Three app variants installable side by side, store screenshots generated from the app itself and OTA updates (no reinstall) for fixes.',
           },
         },
       ],
@@ -536,15 +540,15 @@ export const projects: Project[] = [
         {
           title: { ro: 'Lecțiile sunt cod și sunt rulate', en: 'Lessons are code, and they run' },
           body: {
-            ro: 'Lecțiile stau în fișiere YAML, revizuite ca orice cod. În CI, fiecare fragment rulează pe Python 3.12 și 3.14 și e comparat cu ce afirmă lecția. O lecție care spune 24 când programul afișează 25 oprește build-ul.',
-            en: 'Lessons live in YAML files, reviewed like any code. In CI, every snippet runs on Python 3.12 and 3.14 and is compared with what the lesson claims. A lesson that says 24 when the program prints 25 fails the build.',
+            ro: 'Lecțiile sunt fișiere YAML, revizuite ca orice cod. În CI, fiecare exemplu rulează pe Python 3.12 și 3.14 și e comparat cu ce scrie în lecție. Dacă lecția spune 24 și programul afișează 25, build-ul se oprește.',
+            en: 'Lessons are YAML files, reviewed like any code. In CI, every snippet runs on Python 3.12 and 3.14 and is compared with what the lesson says. If the lesson says 24 and the program prints 25, the build fails.',
           },
         },
         {
           title: { ro: 'Progresul se scrie doar pe server', en: 'Progress is written only on the server' },
           body: {
-            ro: 'XP-ul se scrie exclusiv printr-un registru append-only, din funcții Postgres. Răspunsurile corecte nu părăsesc niciodată baza de date.',
-            en: 'XP is written only through an append-only ledger, from Postgres functions. Answer keys never leave the database.',
+            ro: 'Aplicația nu își poate da singură puncte: XP-ul se scrie doar din funcții Postgres, într-un registru append-only. Răspunsurile corecte nu ies niciodată din baza de date.',
+            en: 'The app can’t award itself points: XP is written only by Postgres functions, into an append-only ledger. Answer keys never leave the database.',
           },
         },
         {

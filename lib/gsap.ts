@@ -10,8 +10,7 @@ import { useGSAP } from '@gsap/react'
  * secțiuni fixate (pin) cu scrub, SplitText, banda care reacționează la viteza de scroll.
  * Restul interfeței (apariții, hover, meniu, formular) rămâne în Motion.
  */
-// Doar în browser: pe server (Cloudflare Workers) registerPlugin pornește ticker-ul GSAP,
-// adică un setTimeout la încărcarea modulului, ceea ce Workers nu permite.
+// Doar în browser: pe server registerPlugin ar porni ticker-ul GSAP (un timer) fără niciun rost.
 if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP)
 
 /** Condițiile comune pentru gsap.matchMedia(): toate efectele se opresc la „mișcare redusă”. */

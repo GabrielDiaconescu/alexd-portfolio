@@ -2,9 +2,9 @@ import type { Locale } from '@/lib/i18n'
 
 const ro = {
   meta: {
-    title: 'Creare site-uri web pentru afaceri · Web design Pitești · Alexandru Diaconescu',
+    title: 'Creare site-uri web în Pitești · Alexandru Diaconescu',
     description:
-      'Creare website-uri de prezentare și site-uri personalizate pentru firme din Pitești, Argeș și din toată România. Design modern, încărcare rapidă, adaptat pentru telefon.',
+      'Dezvoltator web independent din Pitești, Argeș: site-uri de prezentare rapide și clare pentru firme mici. Vorbești direct cu mine, de la ofertă la lansare.',
   },
   skip: 'Sari la conținut',
   nav: {
@@ -22,34 +22,18 @@ const ro = {
   hero: {
     eyebrow: 'Dezvoltator web · Pitești, Argeș',
     // *între steluțe* = cuvinte evidențiate (italic, culoarea de accent)
-    title: ['Afacerea ta merită', 'mai mult decât', 'o simplă pagină', '*pe internet.*'],
-    lead: 'Creez website-uri moderne, rapide și personalizate, care prezintă profesionist afacerea ta și îi ajută pe potențialii clienți să te aleagă.',
+    title: ['Site-uri web', 'pentru firme mici', 'și *afaceri locale.*'],
+    lead: 'Creez site-uri moderne, rapide și ușor de folosit, care prezintă clar serviciile tale și transformă vizitatorii în potențiali clienți.',
     primary: 'Solicită o ofertă',
-    secondary: 'Descoperă proiectele',
+    secondary: 'Vezi proiectele',
     scroll: 'Derulează',
-    status: 'Remote · RO / EN',
+    status: 'Lucrez și online · RO / EN',
     visualLabel: 'Compoziție cu trei proiecte demonstrative: un site pentru o spălătorie de camioane, un site pentru o frizerie și o aplicație de învățat Python.',
-  },
-  manifesto: {
-    label: 'Principiu',
-    text: 'Un site bun trebuie să facă *mai mult* decât să arate bine.',
-    body: 'Trebuie să prezinte clar afacerea, să inspire încredere și să le dea vizitatorilor tot ce le trebuie ca să te contacteze.',
-    note: 'Așa abordez fiecare proiect.',
-    pillars: ['Prezintă afacerea', 'Inspiră încredere', 'Aduce cereri'],
-  },
-  marquee: {
-    label: 'Domenii de activitate',
-    lead: 'Website-uri pentru',
-    rows: [
-      ['Frizerii și saloane de înfrumusețare', 'Restaurante și cafenele', 'Cabinete medicale și stomatologice', 'Agenții imobiliare'],
-      ['Service-uri auto și dealeri', 'Transport și logistică', 'Firme de construcții și servicii', 'Antreprenori și afaceri locale'],
-    ] as [string[], string[]],
-    note: 'Domeniul tău nu e în listă? Fiecare site e construit pe activitatea și pe clienții afacerii tale.',
   },
   work: {
     eyebrow: 'Proiecte',
     title: 'Proiecte care arată cum lucrez.',
-    intro: 'Proiecte demonstrative și personale, realizate integral de mine, de la structură și design până la cod și testare. Nu sunt lucrări comandate de clienți, ci exemple concrete a ceea ce pot construi pentru afacerea ta.',
+    intro: 'Fiecare proiect este realizat de mine, de la design până la implementare. Sunt exemple concrete ale stilului și calității pe care le pot aduce și afacerii tale.',
     problem: 'Scopul proiectului',
     features: 'Funcționalități principale',
     demo: 'Deschide demo-ul live',
@@ -59,36 +43,35 @@ const ro = {
   },
   services: {
     eyebrow: 'Servicii',
-    title: 'Site-uri web create pentru afacerea ta.',
-    intro: 'Alegem împreună ce ai nevoie: un site nou, modernizarea celui existent sau funcții care îți ușurează munca de zi cu zi.',
-    note: 'Fiecare proiect pornește de la o discuție, iar prețul și etapele sunt stabilite în scris înainte de începerea lucrului.',
+    title: 'Ce pot face pentru afacerea ta.',
+    intro: 'Un site nou, refacerea celui vechi sau funcții care îți economisesc timp.',
+    note: 'Nu știi de ce ai nevoie? Spune-mi ce face afacerea ta și îți recomand varianta potrivită.',
     cta: 'Solicită o ofertă',
   },
   about: {
     eyebrow: 'Despre mine',
-    title: 'Construiesc site-uri cu atenție la fiecare detaliu.',
-    approach: 'Cum lucrez',
+    title: 'Cine îți face site-ul.',
     tools: 'Tehnologii folosite',
     cta: 'Hai să discutăm',
     portrait: 'Fotografie în curând',
   },
   process: {
-    eyebrow: 'Proces',
+    eyebrow: 'Cum lucrăm',
     title: 'De la prima discuție la lansare.',
     output: 'Rezultat',
   },
   trust: {
-    eyebrow: 'Avantaje',
-    title: 'De ce să lucrezi cu mine.',
-    intro: 'Încă nu am recenzii publice de la clienți, așa că nu afișez citate. Îți arăt, în schimb, concret cum lucrez.',
-    proof: 'Unde se vede',
+    eyebrow: 'De ce eu',
+    title: 'Ce primești când lucrezi cu mine.',
+    intro: 'Patru angajamente concrete, fiecare cu locul unde îl poți verifica.',
+    proof: 'Unde verifici',
     testimonials: 'Ce spun clienții',
     profiles: 'Mă găsești și pe',
   },
   faq: {
     eyebrow: 'Întrebări frecvente',
     title: 'Înainte să-mi scrii.',
-    intro: 'Răspunsuri scurte la ce mă întreabă oamenii cel mai des: costuri, durată, colaborare și partea tehnică.',
+    intro: 'Răspunsuri scurte despre cost, durată, colaborare și partea tehnică.',
     filter: 'Filtrează întrebările',
     all: 'Toate',
     topics: { start: 'Început', work: 'Colaborare', tech: 'Tehnic', after: 'După lansare' },
@@ -210,6 +193,8 @@ const ro = {
     contact: 'Contact',
     legal: 'Legal',
     privacy: 'Confidențialitate',
+    terms: 'Termeni și condiții',
+    sal: 'ANPC: Soluționarea alternativă a litigiilor (SAL)',
     rights: 'Toate drepturile rezervate.',
     top: 'Înapoi sus',
   },
@@ -222,15 +207,18 @@ const ro = {
     title: 'Politica de confidențialitate',
     updated: 'Ultima actualizare',
   },
+  terms: {
+    title: 'Termeni și condiții',
+  },
 }
 
 export type Dictionary = typeof ro
 
 const en: Dictionary = {
   meta: {
-    title: 'Website design & development for businesses · Alexandru Diaconescu',
+    title: 'Web developer in Pitești, Romania · Alexandru Diaconescu',
     description:
-      'Business websites and custom web development for companies across Romania: modern design, fast loading, built for phones. Based in Pitești, Argeș.',
+      'Independent web developer in Pitești, Romania: fast, clear websites for small businesses. You deal directly with me, from the first quote to launch.',
   },
   skip: 'Skip to content',
   nav: {
@@ -247,34 +235,18 @@ const en: Dictionary = {
   },
   hero: {
     eyebrow: 'Web developer · Pitești, Romania',
-    title: ['Your business', 'deserves more than', 'just a page', '*on the internet.*'],
-    lead: 'I build modern, fast, tailor-made websites that present your business professionally and help potential customers choose you.',
+    title: ['Websites for', 'small and', '*local businesses.*'],
+    lead: 'I build modern, fast, easy-to-use websites that present your services clearly and turn visitors into potential customers.',
     primary: 'Request a quote',
-    secondary: 'Explore the projects',
+    secondary: 'See the projects',
     scroll: 'Scroll',
     status: 'Remote · RO / EN',
     visualLabel: 'A composition of three demo projects: a truck wash website, a barbershop website and a Python learning app.',
   },
-  manifesto: {
-    label: 'Principle',
-    text: 'A good website has to do *more* than look good.',
-    body: 'It has to present the business clearly, earn trust and give visitors everything they need to get in touch.',
-    note: 'That’s how I approach every project.',
-    pillars: ['Presents the business', 'Earns trust', 'Brings in enquiries'],
-  },
-  marquee: {
-    label: 'Industries',
-    lead: 'Websites for',
-    rows: [
-      ['Barbershops and beauty salons', 'Restaurants and cafés', 'Medical and dental practices', 'Real estate agencies'],
-      ['Car services and dealers', 'Transport and logistics', 'Construction and service firms', 'Entrepreneurs and local businesses'],
-    ] as [string[], string[]],
-    note: 'Don’t see your industry? Every website is built around your business and your customers.',
-  },
   work: {
     eyebrow: 'Projects',
     title: 'Projects that show how I work.',
-    intro: 'Demo and personal projects, built entirely by me, from structure and design to code and testing. They aren’t client commissions, but concrete examples of what I can build for your business.',
+    intro: 'I build every project myself, from design to implementation. They’re concrete examples of the style and quality I can bring to your business too.',
     problem: 'Project goal',
     features: 'Key features',
     demo: 'Open the live demo',
@@ -284,36 +256,35 @@ const en: Dictionary = {
   },
   services: {
     eyebrow: 'Services',
-    title: 'Websites built for your business.',
-    intro: 'We choose together what you need: a new website, a modernised version of your current one, or features that make your daily work easier.',
-    note: 'Every project starts with a conversation, and the price and stages are agreed in writing before any work begins.',
+    title: 'What I can build for your business.',
+    intro: 'A new website, a rebuild of your current one, or features that save you time.',
+    note: 'Not sure what you need? Tell me what your business does and I’ll recommend the right option.',
     cta: 'Request a quote',
   },
   about: {
     eyebrow: 'About me',
-    title: 'I build websites with care for every detail.',
-    approach: 'How I work',
+    title: 'Who builds your website.',
     tools: 'Technology I use',
     cta: 'Let’s talk',
     portrait: 'Portrait coming soon',
   },
   process: {
-    eyebrow: 'Process',
+    eyebrow: 'How we work',
     title: 'From first call to launch.',
     output: 'Output',
   },
   trust: {
     eyebrow: 'Why me',
-    title: 'Why work with me.',
-    intro: 'I don’t have public client reviews yet, so I don’t show quotes. Instead, here is concretely how I work.',
-    proof: 'Where you see it',
+    title: 'What you get working with me.',
+    intro: 'Four concrete commitments, each with a place where you can check it.',
+    proof: 'Where to check',
     testimonials: 'What clients say',
     profiles: 'Also on',
   },
   faq: {
     eyebrow: 'FAQ',
     title: 'Before you write.',
-    intro: 'Short answers to what people ask me most: cost, timing, working together and the technical side.',
+    intro: 'Short answers about cost, timing, working together and the technical side.',
     filter: 'Filter the questions',
     all: 'All',
     topics: { start: 'Getting started', work: 'Working together', tech: 'Technical', after: 'After launch' },
@@ -434,6 +405,8 @@ const en: Dictionary = {
     contact: 'Contact',
     legal: 'Legal',
     privacy: 'Privacy',
+    terms: 'Terms and conditions',
+    sal: 'ANPC: Alternative dispute resolution (SAL)',
     rights: 'All rights reserved.',
     top: 'Back to top',
   },
@@ -445,6 +418,9 @@ const en: Dictionary = {
   privacy: {
     title: 'Privacy policy',
     updated: 'Last updated',
+  },
+  terms: {
+    title: 'Terms and conditions',
   },
 }
 

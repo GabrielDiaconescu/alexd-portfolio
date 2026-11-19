@@ -93,9 +93,11 @@ export function SplitLines({ lines, as = 'h2', className, lineClassName, trigger
   return (
     <Tag id={id} className={className} initial="hidden" {...play} variants={staggerChildren(stagger.loose, delay)}>
       <span className="sr-only">{lines.map(plain).join(' ')}</span>
-      <span aria-hidden="true" className="block">
+      {/* Masca fiecărui rând depășește rândul sus (Î, Ă) și jos (ț, ș, g); marginile negative păstrează așezarea.
+          flex-col: marginile rândurilor nu se comasează între ele sau cu titlul. */}
+      <span aria-hidden="true" className="flex flex-col">
         {lines.map((line, i) => (
-          <span key={i} className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
+          <span key={i} className="-mb-[0.12em] -mt-[0.16em] block overflow-hidden pb-[0.12em] pt-[0.16em]">
             <motion.span data-reveal className={`block ${lineClassName ?? ''}`} variants={lineUp}>
               <Accent text={line} />
             </motion.span>

@@ -25,15 +25,20 @@ export function Header({ locale, nav, emails, phone }: Props) {
   const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string | null>(null)
+  const headerRef = useRef<HTMLElement>(null)
   const { scrollY } = useScroll()
 
   // Antetul se retrage la scroll în jos și revine la scroll în sus.
   useMotionValueEvent(scrollY, 'change', (y) => {
     const prev = scrollY.getPrevious() ?? 0
     setScrolled(y > 24)
-    setHidden(y > 480 && y > prev + 4)
+    // Cât timp focusul e în antet, nu îl retragem (WCAG 2.4.11).
+    const focused = headerRef.current?.contains(document.activeElement) ?? false
+    setHidden(y > 480 && y > prev + 4 && !focused)
     if (y < prev - 4) setHidden(false)
   })
+
+  const closeMenu = useCallback(() => setOpen(false), [])
 
   // Secțiunea activă, pentru indicatorul din navigație.
   useEffect(() => {
@@ -57,6 +62,8 @@ export function Header({ locale, nav, emails, phone }: Props) {
   return (
     <>
       <motion.header
+        ref={headerRef}
+        onFocusCapture={() => setHidden(false)}
         initial={false}
         animate={{ y: hidden && !open ? '-100%' : '0%' }}
         transition={{ duration: 0.45, ease: ease.out }}
@@ -72,18 +79,18 @@ export function Header({ locale, nav, emails, phone }: Props) {
           </Link>
 
           <nav aria-label={nav.menu} className="hidden md:block">
-            <ul className="nav-matte flex items-center gap-0.5 p-1">
+            <ul className="nav-pill flex items-center gap-0.5 p-1">
               {links.map((l) => (
                 <li key={l.id}>
                   <Link
                     href={l.href}
-                    className="relative block rounded-full px-4 py-2 text-[0.9375rem] text-mist transition-colors hover:bg-white/5 hover:text-paper aria-[current=true]:text-paper"
+                    className="relative block rounded-full px-4 py-2 text-[0.9375rem] text-mist transition-colors hover:text-paper aria-[current=true]:text-paper"
                     aria-current={active === l.id ? 'true' : undefined}
                   >
                     {active === l.id && (
                       <motion.span
                         layoutId="nav-indicator"
-                        className="absolute inset-0 rounded-full bg-[linear-gradient(180deg,rgb(255_255_255/0.14),rgb(255_255_255/0.05))] shadow-[inset_0_1px_0_rgb(255_255_255/0.22),inset_0_0_0_1px_rgb(255_255_255/0.08)]"
+                        className="absolute inset-0 rounded-full bg-paper/[0.08]"
                         transition={transition.spring}
                       />
                     )}
@@ -94,20 +101,23 @@ export function Header({ locale, nav, emails, phone }: Props) {
             </ul>
           </nav>
 
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center gap-3 md:gap-5">
+            {/* Limba curentă în hârtie, cealaltă în mist (7,9:1); tot linkul duce la cealaltă limbă. */}
             <Link
               href={translatePath(pathname, alt)}
               hrefLang={alt}
               lang={alt}
               aria-label={nav.switchTo}
-              className="hit t-label text-mist transition-colors hover:text-paper"
+              className="hit t-label whitespace-nowrap text-mist transition-colors hover:text-paper"
             >
               <span className={locale === 'ro' ? 'text-paper' : ''}>RO</span>
-              <span className="mx-1.5 text-faint">/</span>
+              <span aria-hidden="true" className="mx-1.5 text-faint">
+                /
+              </span>
               <span className={locale === 'en' ? 'text-paper' : ''}>EN</span>
             </Link>
             <div className="hidden sm:block">
-              <Link href={paths.section(locale, 'contact')} className={buttonClass('primary', '!min-h-10 !px-4')}>
+              <Link href={paths.section(locale, 'contact')} className={buttonClass('primary', '!min-h-11 !px-5 !text-sm')}>
                 <span>{nav.cta}</span>
                 <ArrowSwap />
               </Link>
@@ -117,7 +127,7 @@ export function Header({ locale, nav, emails, phone }: Props) {
         </div>
       </motion.header>
 
-      <MobileMenu open={open} onClose={() => setOpen(false)} locale={locale} nav={nav} links={links} emails={emails} phone={phone} />
+      <MobileMenu open={open} onClose={closeMenu} locale={locale} nav={nav} links={links} emails={emails} phone={phone} />
     </>
   )
 }
@@ -172,7 +182,9 @@ function MobileMenu({ open, onClose, locale, nav, links, emails, phone }: MenuPr
     const root = document.documentElement
     const prevOverflow = root.style.overflow
     root.style.overflow = 'hidden'
-    panel.current?.querySelector<HTMLElement>('a')?.focus()
+    // preventScroll: linkul e încă sub marginea rândului lui (animația pornește de la y: 100%), iar focusul
+    // simplu derula rândul (overflow: hidden) ca să-l arate. Pe iPhone Safari „Proiecte” lipsea câteva secunde.
+    panel.current?.querySelector<HTMLElement>('a')?.focus({ preventScroll: true })
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') return close()
@@ -228,8 +240,9 @@ function MobileMenu({ open, onClose, locale, nav, links, emails, phone }: MenuPr
                   <motion.div
                     variants={{ hidden: { y: '100%' }, show: { y: '0%', transition: { duration: 0.45, ease: ease.out } } }}
                   >
-                    <Link href={l.href} onClick={onClose} className="flex items-baseline justify-between py-5">
-                      <span className="font-display text-[2.75rem] leading-none tracking-[-0.02em]">{l.label}</span>
+                    {/* Mărimea t-h2 de pe telefon (32px): meniul rămâne echilibrat și încape fără scroll pe 360x640. */}
+                    <Link href={l.href} onClick={onClose} className="flex items-baseline justify-between py-4">
+                      <span className="font-display text-[2rem] leading-none tracking-[-0.015em]">{l.label}</span>
                       <span className="t-label text-faint">0{i + 1}</span>
                     </Link>
                   </motion.div>
@@ -240,22 +253,22 @@ function MobileMenu({ open, onClose, locale, nav, links, emails, phone }: MenuPr
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { delay: 0.15, duration: 0.3 } }}
-            className="shell flex flex-col gap-6 pb-[max(2rem,env(safe-area-inset-bottom))]"
+            className="shell flex flex-col gap-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]"
           >
             <Link href={paths.section(locale, 'contact')} onClick={onClose} className={buttonClass('primary', 'w-full')}>
               <span>{nav.cta}</span>
               <ArrowSwap />
             </Link>
-            <ul className="flex flex-col gap-1">
+            <ul className="flex flex-col">
               {emails.map((e) => (
                 <li key={e}>
-                  <a href={`mailto:${e}`} className="inline-block py-1.5 font-mono text-sm text-mist">
+                  <a href={`mailto:${e}`} className="inline-block py-3 font-mono text-sm text-mist">
                     {e}
                   </a>
                 </li>
               ))}
               <li>
-                <a href={phone.href} className="inline-block py-1.5 font-mono text-sm text-mist">
+                <a href={phone.href} className="inline-block py-3 font-mono text-sm text-mist">
                   {phone.label}
                 </a>
               </li>

@@ -4,7 +4,7 @@ import { getDictionary } from '@/content/dictionary'
 import { getProject, projects } from '@/content/projects'
 import type { Project } from '@/content/types'
 import { site } from '@/content/site'
-import { type Locale, isLocale, paths } from '@/lib/i18n'
+import { type Locale, isLocale, languageAlternates, ogLocales, paths } from '@/lib/i18n'
 import { CaseStudy } from './case-study'
 
 /**
@@ -37,9 +37,18 @@ export function caseRoute(owner: Locale) {
         description,
         alternates: {
           canonical: paths.project(owner, slug),
-          languages: { ro: paths.project('ro', slug), en: paths.project('en', slug) },
+          languages: languageAlternates((l) => paths.project(l, slug)),
         },
-        openGraph: { type: 'article', title, description, url: paths.project(owner, slug) },
+        // openGraph și twitter nu se moștenesc pe câmpuri: obiectul de aici îl înlocuiește pe cel din layout, deci e complet.
+        openGraph: {
+          type: 'article',
+          siteName: site.displayName,
+          ...ogLocales(owner),
+          title,
+          description,
+          url: paths.project(owner, slug),
+        },
+        twitter: { card: 'summary_large_image', title, description },
       }
     },
 
@@ -54,7 +63,7 @@ export function caseRoute(owner: Locale) {
           <script
             type="application/ld+json"
             // Conținut static, generat din content/projects.ts.
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(caseJsonLd(found.project, found.locale, dict.work.eyebrow)).replace(/</g, '\\u003c') }}
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(caseJsonLd(found.project, found.locale)).replace(/</g, '\\u003c') }}
           />
         </>
       )
@@ -70,8 +79,11 @@ function snippet(text: string, max = 160) {
   return `${text.slice(0, max - 1).replace(/\s+\S*$/, '')}…`
 }
 
-/** Proiectul ca CreativeWork, plus firul de navigare (Acasă › Proiecte › proiect) pentru rezultatele Google. */
-function caseJsonLd(project: Project, locale: Locale, workLabel: string) {
+/**
+ * Proiectul ca CreativeWork, plus firul de navigare (Acasă › proiect) pentru rezultatele Google.
+ * Nu există o pagină cu lista proiectelor, iar un URL cu fragment (/ro#work) ar fi citit tot ca prima pagină.
+ */
+function caseJsonLd(project: Project, locale: Locale) {
   const abs = (p: string) => new URL(p, site.url).toString()
   const url = abs(paths.project(locale, project.slug))
   return {
@@ -94,8 +106,7 @@ function caseJsonLd(project: Project, locale: Locale, workLabel: string) {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: site.displayName, item: abs(paths.home(locale)) },
-          { '@type': 'ListItem', position: 2, name: workLabel, item: abs(paths.section(locale, 'work')) },
-          { '@type': 'ListItem', position: 3, name: project.name[locale], item: url },
+          { '@type': 'ListItem', position: 2, name: project.name[locale], item: url },
         ],
       },
     ],

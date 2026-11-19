@@ -6,40 +6,40 @@ export const process: Step[] = [
   {
     title: { ro: 'Discuție', en: 'First conversation' },
     body: {
-      ro: 'Vorbim despre afacere, clienții tăi și ce vrei să obții de la site. Te întreb ce contează, nu ce sună tehnic.',
-      en: 'We talk about your business, your customers and what you want the website to achieve. I ask about what matters, not what sounds technical.',
+      ro: 'Vorbim despre afacerea ta și despre ce vrei să facă site-ul. Fără termeni tehnici.',
+      en: 'We talk about your business and what you want the website to do. No jargon.',
     },
     output: { ro: 'Obiective clare', en: 'Clear goals' },
   },
   {
     title: { ro: 'Ofertă și plan', en: 'Quote & plan' },
     body: {
-      ro: 'Primești în scris paginile, funcțiile, prețul și calendarul pe etape. Lucrul începe doar după ce le aprobi.',
-      en: 'You get the pages, features, price and timeline in writing. Work starts only once you approve them.',
+      ro: 'Primești în scris ce pagini și funcții intră, cât costă și când e gata. Încep doar după ce aprobi.',
+      en: 'You get in writing which pages and features are included, what it costs and when it’s ready. I start only once you approve.',
     },
     output: { ro: 'Ofertă scrisă, preț fix', en: 'Written quote, fixed price' },
   },
   {
     title: { ro: 'Design și dezvoltare', en: 'Design & development' },
     body: {
-      ro: 'Întâi structura și designul pentru telefon și desktop, apoi codul. Urmărești progresul pe o adresă de test, pe site-ul real.',
-      en: 'Structure and design for phone and desktop first, then the code. You follow progress on a preview link, on the real site.',
+      ro: 'Întâi designul, apoi construcția. Vezi progresul pe un link de test, direct pe site, nu în poze.',
+      en: 'Design first, then the build. You follow progress on a preview link, on the real site, not in screenshots.',
     },
-    output: { ro: 'Site funcțional, pe adresă de test', en: 'Working site on a preview link' },
+    output: { ro: 'Site funcțional, pe un link de test', en: 'Working site on a preview link' },
   },
   {
     title: { ro: 'Revizii și testare', en: 'Review & testing' },
     body: {
-      ro: 'Ajustăm împreună textele și detaliile. Verific fiecare pagină pe telefon și desktop: viteză, formulare, accesibilitate.',
-      en: 'We refine copy and details together. I check every page on phone and desktop: speed, forms, accessibility.',
+      ro: 'Îmi spui ce vrei schimbat și ajustăm împreună. Apoi testez fiecare pagină, formularele și viteza.',
+      en: 'You tell me what to change and we adjust it together. Then I test every page, the forms and the speed.',
     },
     output: { ro: 'Versiune aprobată', en: 'Approved version' },
   },
   {
     title: { ro: 'Lansare', en: 'Launch' },
     body: {
-      ro: 'Publicăm pe domeniul tău și verificăm indexarea în Google. Primești instrucțiuni clare despre cum se actualizează site-ul.',
-      en: 'We go live on your domain and check Google indexing. You get clear instructions on how the site is updated.',
+      ro: 'Publicăm site-ul pe domeniul tău. Îl trimit apoi la Google, ca să poată apărea în căutări.',
+      en: 'We put the site live on your domain. Then I submit it to Google so it can show up in search.',
     },
     output: { ro: 'Site live, predat complet', en: 'Live site, fully handed over' },
   },

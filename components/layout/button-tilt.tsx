@@ -2,13 +2,12 @@
 
 import { useEffect } from 'react'
 
-const MAX_TILT = 10 // grade
-const PULL = { x: 6, y: 4 } // px: butonul e „tras” ușor spre cursor
+const PULL = { x: 4, y: 3 } // px: cât e „tras” butonul spre cursor
 
 /**
- * Efectul 3D al butoanelor (.btn): pe desktop, butonul se înclină după cursor și e tras ușor spre el,
- * iar lumina din ::before urmărește mouse-ul. Un singur listener pe document, deci merge și pentru
- * butoanele care apar ulterior (formular, meniu). Pe touch și la „mișcare redusă” nu face nimic.
+ * Pe desktop, butoanele (.btn) sunt trase ușor spre cursor; fără înclinare 3D și fără reflexii.
+ * Un singur listener pe document, deci merge și pentru butoanele care apar ulterior (formular, meniu).
+ * Pe touch și la „mișcare redusă” nu face nimic. Numele rămâne pentru importul din layout.
  */
 export function ButtonTilt() {
   useEffect(() => {
@@ -20,8 +19,9 @@ export function ButtonTilt() {
     let frame = 0
 
     const reset = (el: HTMLElement) => {
-      el.removeAttribute('data-tilting')
-      for (const v of ['--rx', '--ry', '--tx', '--ty', '--gx', '--gy']) el.style.removeProperty(v)
+      el.removeAttribute('data-pull')
+      el.style.removeProperty('--tx')
+      el.style.removeProperty('--ty')
     }
 
     const apply = () => {
@@ -30,13 +30,8 @@ export function ButtonTilt() {
       const r = current.getBoundingClientRect()
       const x = Math.min(1, Math.max(0, (last.clientX - r.left) / r.width))
       const y = Math.min(1, Math.max(0, (last.clientY - r.top) / r.height))
-      // Partea de sub cursor se „apasă”: pe orizontală mai mult, pe verticală mai puțin (butoanele sunt late).
-      current.style.setProperty('--rx', `${((0.5 - y) * MAX_TILT).toFixed(2)}deg`)
-      current.style.setProperty('--ry', `${((x - 0.5) * MAX_TILT * 0.6).toFixed(2)}deg`)
       current.style.setProperty('--tx', `${((x - 0.5) * PULL.x).toFixed(2)}px`)
       current.style.setProperty('--ty', `${((y - 0.5) * PULL.y).toFixed(2)}px`)
-      current.style.setProperty('--gx', `${(x * 100).toFixed(1)}%`)
-      current.style.setProperty('--gy', `${(y * 100).toFixed(1)}%`)
     }
 
     const onMove = (e: PointerEvent) => {
@@ -44,7 +39,7 @@ export function ButtonTilt() {
       if (el !== current) {
         if (current) reset(current)
         current = el
-        current?.setAttribute('data-tilting', '')
+        current?.setAttribute('data-pull', '')
       }
       if (!current) return
       last = e

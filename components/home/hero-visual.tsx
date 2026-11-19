@@ -55,21 +55,9 @@ export function HeroVisual({ projects, locale, label }: Props) {
           className="absolute -bottom-[18%] left-[-20%] h-[70%] w-[140%] bg-[linear-gradient(rgb(139_124_246/0.22)_1px,transparent_1px),linear-gradient(90deg,rgb(139_124_246/0.22)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_40%,#000,transparent_75%)]"
           style={{ transform: 'translateZ(-160px) rotateX(78deg)' }}
         />
-        {/* Inelul orbital, în spatele capturilor. */}
-        <div
-          className="absolute left-[8%] top-[6%] aspect-square w-[84%] rounded-full border border-[rgb(139_124_246/0.28)] shadow-[0_0_40px_rgb(91_108_255/0.18),inset_0_0_40px_rgb(91_108_255/0.12)]"
-          style={{ transform: 'translateZ(-260px) rotateX(64deg) rotateZ(-18deg)' }}
-        />
-
-        <Orb z={-200} className="right-[8%] top-[2%] size-[4.5%]" color="violet" delay="-2s" />
-        <Orb z={60} className="left-[-3%] top-[46%] size-[3%]" color="blue" delay="-5s" />
-        <Orb z={220} className="right-[18%] bottom-[6%] size-[5.5%]" color="ember" delay="-8s" />
-        <Shard z={90} className="left-[-4%] top-[22%] size-[5%]" />
-        <Shard z={-60} className="right-[-2%] top-[30%] size-[3.5%]" />
-
         <Layer z={-120} className="left-[2%] top-[4%] w-[76%]" delay="0s">
           <motion.div {...enter(0.35)}>
-            <Browser project={truck} locale={locale} />
+            <Browser project={truck} locale={locale} first />
           </motion.div>
         </Layer>
         <Layer z={0} className="right-0 top-[40%] w-[64%]" delay="-3s">
@@ -141,40 +129,6 @@ function Particles() {
   )
 }
 
-const orbColors = {
-  ember: ['#ffb08f', '#ff6a3d', '#7a2410', 'rgb(255 106 61/0.55)'],
-  blue: ['#b8c4ff', '#3b5bff', '#0f1a5c', 'rgb(59 91 255/0.55)'],
-  violet: ['#ddd0ff', '#8b5cf6', '#2e1766', 'rgb(139 92 246/0.55)'],
-} as const
-
-/** O sferă luminoasă: lumina cade din stânga-sus, iar glow-ul are culoarea ei. */
-function Orb({ z, className, color, delay }: { z: number; className: string; color: keyof typeof orbColors; delay: string }) {
-  const [hi, mid, low, glow] = orbColors[color]
-  return (
-    <div className={`absolute ${className}`} style={{ transform: `translateZ(${z}px)` }}>
-      <div
-        className="animate-float aspect-square w-full rounded-full"
-        style={{
-          animationDelay: delay,
-          background: `radial-gradient(circle at 32% 28%, ${hi}, ${mid} 45%, ${low} 85%)`,
-          boxShadow: `0 0 24px 4px ${glow}, 0 12px 30px -8px rgb(0 0 0/0.8)`,
-        }}
-      />
-    </div>
-  )
-}
-
-/** Un romb de sticlă, cu muchii luminate. */
-function Shard({ z, className }: { z: number; className: string }) {
-  return (
-    <div className={`absolute ${className}`} style={{ transform: `translateZ(${z}px)` }}>
-      <div className="aspect-square w-full">
-        <div className="size-full rotate-45 border border-[rgb(190_200_255/0.45)] bg-[linear-gradient(135deg,rgb(255_255_255/0.18),rgb(139_92_246/0.08))] shadow-[0_0_20px_rgb(139_92_246/0.35)]" />
-      </div>
-    </div>
-  )
-}
-
 function Layer({ z, className, delay, children }: { z: number; className: string; delay: string; children: React.ReactNode }) {
   return (
     <div className={`absolute ${className}`} style={{ transform: `translateZ(${z}px)` }}>
@@ -186,7 +140,7 @@ function Layer({ z, className, delay, children }: { z: number; className: string
 }
 
 /** Ramă de browser: captura proiectului sau, dacă nu are, posterul lui tipografic. */
-function Browser({ project, locale }: { project: Project; locale: Locale }) {
+function Browser({ project, locale, first = false }: { project: Project; locale: Locale; first?: boolean }) {
   const { cover, poster } = project
   return (
     <div
@@ -204,9 +158,11 @@ function Browser({ project, locale }: { project: Project; locale: Locale }) {
           width={cover.width}
           height={cover.height}
           alt=""
-          sizes="(min-width: 1024px) 34vw, 80vw"
+          sizes={first ? '(min-width: 1024px) 36vw, 80vw' : '(min-width: 1024px) 31vw, 68vw'}
           quality={85}
-          loading="lazy"
+          // Prima captură (stratul din spate, sus) e elementul LCP: prioritate mare; restul rămân lazy.
+          loading={first ? 'eager' : 'lazy'}
+          fetchPriority={first ? 'high' : undefined}
           className="block h-auto w-full"
         />
       ) : (
