@@ -15,3 +15,5 @@ next-env.d.ts
 Thumbs.db
 npm-debug.log*
 /dist/
+
+.env.production
