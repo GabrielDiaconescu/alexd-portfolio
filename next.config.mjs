@@ -1,5 +1,4 @@
-import type { NextConfig } from 'next'
-
+// Fișier .mjs, nu .ts: pe găzduire rulează fără pachetul typescript (devDependencies nu se instalează acolo).
 const isDev = process.env.NODE_ENV === 'development'
 
 // Paginile statice Next.js au scripturi inline, deci script-src are nevoie de 'unsafe-inline'.
@@ -18,7 +17,8 @@ const csp = [
   "frame-ancestors 'none'",
 ].join('; ')
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   poweredByHeader: false,
   // În C:\Users\Alexandru există un package-lock.json rătăcit; fixăm rădăcina proiectului aici.
   turbopack: { root: process.cwd() },
@@ -31,6 +31,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     globalNotFound: true,
+    agentUpgrade: 'security',
   },
   async headers() {
     return [

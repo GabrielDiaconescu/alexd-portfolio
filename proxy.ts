@@ -1,23 +1,26 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { site } from '@/content/site'
+import { negotiateLocale } from '@/lib/i18n'
 
 /**
- * Doar pentru „/”: trimite vizitatorul la /ro sau /en după limba preferată din browser.
- * Implicit română (piața principală). Restul adreselor nu trec prin aici.
+ * 1. www.alexd.ro → alexd.ro (308, păstrează calea și parametrii), ca Google să vadă o singură adresă.
+ * 2. „/”: trimite vizitatorul la limba preferată din browser, dintre cele din `locales`. Implicit română.
  */
 export function proxy(request: NextRequest) {
-  const header = request.headers.get('accept-language') ?? ''
-  const preferred = header
-    .split(',')
-    .map((part) => {
-      const [tag, q] = part.trim().split(';q=')
-      return { lang: tag.toLowerCase().slice(0, 2), q: q ? Number(q) : 1 }
-    })
-    .filter((x) => x.lang === 'ro' || x.lang === 'en')
-    .sort((a, b) => b.q - a.q)[0]?.lang
-  const locale = preferred ?? 'ro'
-  return NextResponse.redirect(new URL(`/${locale}`, request.url), 307)
+  const canonicalHost = new URL(site.url).hostname
+  const host = (request.headers.get('host') ?? '').toLowerCase().split(':')[0]
+  if (host === `www.${canonicalHost}`) {
+    const { pathname, search } = request.nextUrl
+    return NextResponse.redirect(new URL(pathname + search, site.url), 308)
+  }
+  if (request.nextUrl.pathname === '/') {
+    const locale = negotiateLocale(request.headers.get('accept-language'))
+    return NextResponse.redirect(new URL(`/${locale}`, request.url), 307)
+  }
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: '/',
+  // Toate paginile, fără fișierele statice din _next (nu au nevoie de redirect-ul de limbă).
+  matcher: '/((?!_next/).*)',
 }
