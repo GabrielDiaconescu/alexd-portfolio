@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" fill="#0d0d0b"/>
-  <text x="9" y="47" font-family="Georgia, 'Times New Roman', serif" font-size="40" fill="#f1ede4" letter-spacing="-2">AD</text>
-  <circle cx="54" cy="44" r="4" fill="#ff6a3d"/>
+  <path fill="#f1ede4" fill-rule="evenodd" d="M12 12H27C38 12 46 20 46 32C46 44 38 52 27 52H12ZM20 19V45H26C33 45 38 40 38 32C38 24 33 19 26 19Z"/>
+  <circle cx="52" cy="49" r="5" fill="#ff6a3d"/>
 </svg>
