@@ -17,11 +17,11 @@ export const privacySections: { title: Localized; body: Localized<string[]> }[] 
     title: { ro: 'Ce date colectăm', en: 'What we collect' },
     body: {
       ro: [
-        'Doar ce completezi în formularul de proiect: numele, adresa de e-mail, opțional firma, serviciul dorit, intervalul de buget, perioada și descrierea proiectului.',
+        'Doar ce completezi în formularul de proiect: numele, adresa de e-mail sau numărul de telefon, tipul proiectului, opțional intervalul de buget și descrierea proiectului.',
         'Site-ul nu folosește cookie-uri, instrumente de analiză sau pixeli de urmărire.',
       ],
       en: [
-        'Only what you enter in the project form: your name, email address, optionally your company, the service, budget range, timeframe and project description.',
+        'Only what you enter in the project form: your name, email address or phone number, the project type, optionally a budget range, and the project description.',
         'The site uses no cookies, analytics tools or tracking pixels.',
       ],
     },
@@ -37,20 +37,22 @@ export const privacySections: { title: Localized; body: Localized<string[]> }[] 
     title: { ro: 'Unde ajung datele', en: 'Where the data goes' },
     body: {
       ro: [
-        'Formularul trimite mesajul prin Resend, un serviciu de trimitere a e-mailurilor, direct în căsuța de e-mail a operatorului. Site-ul nu salvează cererile într-o bază de date.',
-        '[DE COMPLETAT] Furnizorul de găzduire (de exemplu Vercel) poate păstra jurnale tehnice ale accesărilor. Menționează-l aici după ce alegi găzduirea.',
+        'Formularul trimite mesajul direct în căsuța de e-mail a operatorului, prin serverul de e-mail al găzduirii (Hosterion), fără un serviciu extern de trimitere a e-mailurilor. Site-ul nu salvează cererile într-o bază de date.',
+        'Site-ul este găzduit la Hosterion, în România. Ca orice furnizor de găzduire, Hosterion păstrează pentru o perioadă limitată jurnale tehnice ale accesărilor (adresa IP, data și pagina cerută), folosite pentru securitate și depanare.',
+        'Ca să oprim mesajele automate, serverul ține minte adresa IP de la care s-a trimis formularul timp de cel mult 10 minute, doar în memorie. Nu o salvează și nu o asociază cu mesajul.',
       ],
       en: [
-        'The form sends your message through Resend, an email delivery service, straight to the controller’s inbox. The site does not store requests in a database.',
-        '[TO COMPLETE] The hosting provider (for example Vercel) may keep technical access logs. Name it here once hosting is chosen.',
+        'The form sends your message straight to the controller’s inbox through the hosting provider’s email server (Hosterion), without a third-party email delivery service. The site does not store requests in a database.',
+        'The site is hosted by Hosterion, in Romania. Like any hosting provider, Hosterion keeps technical access logs (IP address, date and requested page) for a limited time, used for security and troubleshooting.',
+        'To stop automated messages, the server remembers the IP address a form was sent from for at most 10 minutes, in memory only. It is not stored and not linked to the message.',
       ],
     },
   },
   {
     title: { ro: 'Cât timp le păstrăm', en: 'How long we keep it' },
     body: {
-      ro: ['[DE COMPLETAT] Stabilește o durată, de exemplu: e-mailurile cu cereri care nu devin proiecte se șterg după 12 luni.'],
-      en: ['[TO COMPLETE] Set a retention period, for example: emails about requests that do not become projects are deleted after 12 months.'],
+      ro: ['E-mailurile cu cereri care nu devin proiecte se șterg după 24 de luni. Dacă începem să lucrăm împreună, corespondența se păstrează pe durata colaborării și cât cere legea pentru documentele contabile.'],
+      en: ['Emails about requests that do not become projects are deleted after 24 months. If we start working together, the correspondence is kept for the length of the collaboration and for as long as the law requires for accounting records.'],
     },
   },
   {
