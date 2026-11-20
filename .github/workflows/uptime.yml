@@ -1,0 +1,35 @@
+name: Uptime
+
+# Verifică la fiecare 15 minute că site-ul public răspunde. Dacă o rută cade,
+# jobul pică, iar GitHub trimite e-mail proprietarului repo-ului (Settings >
+# Notifications > Actions). Nu verifică admin.alexd.ro: accesul acolo e limitat
+# geografic, iar runnerele GitHub sunt în afara României.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: uptime
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check public routes return 200
+        shell: bash
+        run: |
+          fail=0
+          for path in / /ro /favicon.ico /sitemap.xml /robots.txt; do
+            url="https://alexd.ro${path}"
+            code=$(curl -sS -o /dev/null -L --max-time 20 --retry 2 --retry-delay 5 -w '%{http_code}' "$url" || echo 000)
+            echo "$code $url"
+            if [ "$code" != "200" ]; then fail=1; fi
+          done
+          exit $fail
